@@ -14,3 +14,11 @@ type InternalSeckillResponse struct {
 	OK 		bool 	`json:"ok"`
 	Message string 	`json:"message"`
 }
+
+type ActivityConfig struct {
+	Enabled 			bool 	`json:"enabled"`
+	StartAtUnix 		int64 	`json:"start_at_unix"`
+	EndAtUnix			int64 	`json:"end_at_unix"`
+	UserProductLimit	int 	`json:"user_product_limit"`
+}
+

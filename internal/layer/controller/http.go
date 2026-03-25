@@ -22,6 +22,23 @@ func (h *Handler) Register(r *gin.Engine) {
 	r.POST("/internal/seckill",h.Seckill)
 	r.GET("/internal/stock",h.Stock)
 	r.POST("/internal/admin/init",h.Init)
+	r.GET("/internal/admin/activity",h.GetActivity)
+	r.POST("/internal/admin/activity",h.UpdateActivity)
+}
+
+func (h *Handler) GetActivity(c *gin.Context) {
+	c.JSON(http.StatusOK,h.core.GetActivity())
+}
+
+func (h *Handler) UpdateActivity(c *gin.Context) {
+	var req model.ActivityConfig
+	if err :=c.ShouldBindJSON(&req);err !=nil {
+		c.JSON(http.StatusBadRequest,gin.H{"code":400,"message":"bad request"})
+		return
+	}
+
+	h.core.UpdateActivity(req)
+	c.JSON(http.StatusOK,gin.H{"code":0,"message":"ok"})
 }
 
 func (h *Handler) Healthz(c *gin.Context) {
@@ -36,7 +53,34 @@ func (h *Handler) Seckill(c *gin.Context) {
 	}
 
 	ok,msg:=h.core.TrySeckill(req)
-	c.JSON(http.StatusBadRequest,model.InternalSeckillResponse{OK:ok,Message:msg})
+	if ok {
+		c.JSON(http.StatusOK,model.InternalSeckillResponse{
+			OK:true,
+			Message:"success",
+		})
+		return
+	}
+
+	status:=http.StatusConflict
+    switch msg {
+    case service.ErrTooFrequent:
+        status = http.StatusTooManyRequests
+    case service.ErrSystemBusy:
+        status = http.StatusTooManyRequests
+    case service.ErrDuplicateOrder:
+        status = http.StatusConflict
+    case service.ErrSoldOut:
+        status = http.StatusConflict
+	case service.ErrActivityClosed:
+		status =http.StatusConflict
+    default:
+        status = http.StatusInternalServerError
+	}
+
+	c.JSON(status,model.InternalSeckillResponse{
+		OK:false,
+		Message:msg,
+	})
 }
 
 func (h *Handler)Stock(c *gin.Context) {

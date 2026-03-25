@@ -5,14 +5,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"seckill/internal/common/model"
-	"seckill/internal/proxy/service"
+	proxysvc "seckill/internal/proxy/service"
+	layersvc "seckill/internal/layer/service"
 )
 
 type Handler struct {
-	layer *service.LayerClient
+	layer *proxysvc.LayerClient
 }
 
-func NewHandler(layer *service.LayerClient) *Handler {
+func NewHandler(layer *proxysvc.LayerClient) *Handler {
 	return &Handler{layer:layer}
 }
 
@@ -38,7 +39,18 @@ func (h *Handler) Seckill(c *gin.Context) {
 		return
 	}
 	if !ret.OK{
-		c.JSON(http.StatusOK,model.SeckillResponse{Code:1001,Message:ret.Message})
+		code := 1003
+        switch ret.Message {
+        case layersvc.ErrDuplicateOrder, layersvc.ErrSoldOut, layersvc.ErrActivityClosed:
+            code = 1001
+        case layersvc.ErrTooFrequent, layersvc.ErrSystemBusy:
+            code = 1002
+        }
+
+		c.JSON(http.StatusOK,model.SeckillResponse{
+			Code:code,
+			Message:ret.Message,
+		})
 		return
 	}
 	c.JSON(http.StatusOK,model.SeckillResponse{Code:0,Message:"success"})
