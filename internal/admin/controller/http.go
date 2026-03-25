@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"seckill/internal/admin/service"
-	"seckill/internal/admin/service"
+    "seckill/internal/common/model"
 )
 
 type Handler struct {
@@ -32,6 +32,7 @@ func (h *Handler) GetActivity(c *gin.Context) {
 	cfg,err :=h.client.GetActivity()
 	if err !=nil {
 		c.JSON(http.StatusBadGateway,gin.H{"code":502,"message":"layer unvailable"})
+		return
 	}
 	c.JSON(http.StatusOK,cfg)
 }
@@ -43,7 +44,7 @@ func (h *Handler) UpdateActivity(c *gin.Context) {
 		return
 	}
 	if err :=h.client.UpdateActivity(req);err !=nil {
-		c.JSON(http.StatusBadGateway,gin.H{"code":502,"message":"layer unvailable"})
+		c.JSON(http.StatusBadGateway,gin.H{"code":502,"message":"layer unavailable"})
 		return
 	}
 	c.JSON(http.StatusOK,gin.H{"code":0,"message":"ok"})

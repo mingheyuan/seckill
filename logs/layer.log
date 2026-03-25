@@ -8,37 +8,10 @@
 [GIN-debug] POST   /internal/seckill         --> seckill/internal/layer/controller.(*Handler).Seckill-fm (3 handlers)
 [GIN-debug] GET    /internal/stock           --> seckill/internal/layer/controller.(*Handler).Stock-fm (3 handlers)
 [GIN-debug] POST   /internal/admin/init      --> seckill/internal/layer/controller.(*Handler).Init-fm (3 handlers)
-2026/03/23 09:10:57 layer listening on :8081
+[GIN-debug] GET    /internal/admin/activity  --> seckill/internal/layer/controller.(*Handler).GetActivity-fm (3 handlers)
+[GIN-debug] POST   /internal/admin/activity  --> seckill/internal/layer/controller.(*Handler).UpdateActivity-fm (3 handlers)
+2026/03/25 08:01:51 layer listening on :8081
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://github.com/gin-gonic/gin/blob/master/docs/doc.md#dont-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8081
-[GIN] 2026/03/23 - 09:10:57 | 200 | 505.307µs |       127.0.0.1 | GET      "/healthz"
-[GIN] 2026/03/23 - 09:11:45 | 200 |   2.31ms |       127.0.0.1 | POST     "/internal/admin/init"
-[GIN] 2026/03/23 - 09:11:45 | 200 | 970.388µs |       127.0.0.1 | GET      "/internal/stock?activity_id=1001"
-[GIN] 2026/03/23 - 09:11:45 | 400 | 174.12µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/23 09:11:45 persist order user=u1 activity=1001
-[GIN] 2026/03/23 - 09:11:45 | 400 | 87.856µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:45 | 400 | 83.729µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/23 09:11:45 persist order user=u2 activity=1001
-[GIN] 2026/03/23 - 09:11:46 | 400 | 133.463µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/23 09:11:46 persist order user=u5 activity=1001
-[GIN] 2026/03/23 - 09:11:46 | 400 | 95.351µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/23 09:11:46 persist order user=u9 activity=1001
-[GIN] 2026/03/23 - 09:11:46 | 400 | 60.385µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/23 09:11:46 persist order user=u4 activity=1001
-[GIN] 2026/03/23 - 09:11:46 | 400 | 45.035µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 98.056µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 42.541µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 62.147µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 77.817µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 60.945µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 28.694µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 55.525µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 50.165µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 11.162µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 25.208µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 71.185µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 66.316µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 21.551µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 400 | 98.947µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 | 85.191µs |       127.0.0.1 | GET      "/internal/stock?activity_id=1001"
+[GIN] 2026/03/25 - 08:01:51 | 200 | 68.177µs |       127.0.0.1 | GET      "/healthz"

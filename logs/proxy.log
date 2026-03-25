@@ -6,29 +6,8 @@
 
 [GIN-debug] GET    /healthz                  --> seckill/internal/proxy/controller.(*Handler).Healthz-fm (3 handlers)
 [GIN-debug] POST   /api/seckill              --> seckill/internal/proxy/controller.(*Handler).Seckill-fm (3 handlers)
-2026/03/23 09:10:56 proxy listening on :8080
+2026/03/25 08:01:51 proxy listening on :8080
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://github.com/gin-gonic/gin/blob/master/docs/doc.md#dont-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8080
-[GIN] 2026/03/23 - 09:10:57 | 200 | 42.601µs |       127.0.0.1 | GET      "/healthz"
-[GIN] 2026/03/23 - 09:11:45 | 200 |   2.36ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:45 | 200 | 886.29µs |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:45 | 200 |      1ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 | 884.602µs |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 |   1.07ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 |   1.83ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 |    2.1ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 |   2.13ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 |   1.09ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 |   1.25ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 |   1.02ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 |   1.24ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 | 528.066µs |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 |   1.01ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 | 495.438µs |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 | 518.302µs |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 |   1.04ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 |   1.28ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 |   1.28ms |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 | 544.381µs |       127.0.0.1 | POST     "/api/seckill"
-[GIN] 2026/03/23 - 09:11:46 | 200 | 729.767µs |       127.0.0.1 | POST     "/api/seckill"
+[GIN] 2026/03/25 - 08:01:51 | 200 | 45.515µs |       127.0.0.1 | GET      "/healthz"

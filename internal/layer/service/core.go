@@ -43,8 +43,12 @@ type Core struct {
 
 func NewCore(ctx context.Context) *Core {
 	now :=time.Now().Unix()
-	s:= NewMemoryStore()
-	c:= &Core {
+	s,err:=NewStoreFromEnv()
+	if err !=nil {
+        log.Printf("init store failed, fallback to memory: %v", err)
+		s =NewMemoryStore()
+	}
+	c:= &Core{
 		store:s,
 		userLimit:20,
 		userSec:make(map[string]userBucket,1024),
@@ -53,7 +57,7 @@ func NewCore(ctx context.Context) *Core {
 			StartAtUnix:now -3600,
 			EndAtUnix: 	now +86400,
 			UserProductLimit:1,
-		}
+		},
 	}
 
 	c.pool =queue.NewWorkerPool(1024,4,func(req model.SeckillRequest){
