@@ -13,6 +13,8 @@ func main() {
 	ctx :=context.Background()
 	core :=service.NewCore(ctx)
 
+	service.StartEtcdActivitySync(ctx,core)
+
 	r:=gin.Default()
 	controller.NewHandler(core).Register(r)
 	

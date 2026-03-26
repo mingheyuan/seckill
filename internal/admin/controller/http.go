@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,10 +11,11 @@ import (
 
 type Handler struct {
 	client *service.LayerAdminClient
+	publisher *service.EtcdPublisher
 }
 
-func NewHandler(client *service.LayerAdminClient) *Handler {
-	return &Handler{client:client}
+func NewHandler(client *service.LayerAdminClient,publisher *service.EtcdPublisher) *Handler {
+	return &Handler{client:client,publisher:publisher}
 }
 
 type initReq struct {
@@ -47,6 +49,11 @@ func (h *Handler) UpdateActivity(c *gin.Context) {
 		c.JSON(http.StatusBadGateway,gin.H{"code":502,"message":"layer unavailable"})
 		return
 	}
+
+    // 错误说明: etcd 同步失败不应让主流程失败，否则 admin 配置会因为 etcd 短抖动不可用
+    if err := h.publisher.PublishActivity(req); err != nil {
+        log.Printf("publish activity to etcd failed: %v", err)
+    }
 	c.JSON(http.StatusOK,gin.H{"code":0,"message":"ok"})
 }
 

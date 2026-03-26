@@ -26,7 +26,7 @@ func (h *Handler) Register(r *gin.Engine) {
 func (h *Handler) OrdersByUser(c *gin.Context) {
 	userID :=c.Query("user_id")
 	if userID =="" {
-		c.JSON(http.StatusBadGateway,gin.H{"code":400,"message":"user_id required"})
+		c.JSON(http.StatusBadRequest,gin.H{"code":400,"message":"user_id required"})
 		return
 	}
 
