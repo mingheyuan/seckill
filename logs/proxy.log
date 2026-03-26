@@ -6,8 +6,11 @@
 
 [GIN-debug] GET    /healthz                  --> seckill/internal/proxy/controller.(*Handler).Healthz-fm (3 handlers)
 [GIN-debug] POST   /api/seckill              --> seckill/internal/proxy/controller.(*Handler).Seckill-fm (3 handlers)
-2026/03/25 08:01:51 proxy listening on :8080
+[GIN-debug] GET    /api/orders               --> seckill/internal/proxy/controller.(*Handler).OrdersByUser-fm (3 handlers)
+2026/03/25 23:58:03 proxy listening on :8080
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://github.com/gin-gonic/gin/blob/master/docs/doc.md#dont-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8080
-[GIN] 2026/03/25 - 08:01:51 | 200 | 45.515µs |       127.0.0.1 | GET      "/healthz"
+[GIN] 2026/03/25 - 23:58:03 | 200 |  26.52µs |       127.0.0.1 | GET      "/healthz"
+[GIN] 2026/03/25 - 23:58:14 | 200 |  11.87ms |       127.0.0.1 | POST     "/api/seckill"
+[GIN] 2026/03/25 - 23:58:31 | 200 |  15.21ms |       127.0.0.1 | GET      "/api/orders?user_id=u100"

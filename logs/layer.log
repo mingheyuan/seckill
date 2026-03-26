@@ -1,3 +1,5 @@
+2026/03/25 23:58:03 mysql-redis store enabled: redis=127.0.0.1:6379
+2026/03/25 23:58:03 store selected: mysql-redis
 [GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
 
 [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
@@ -10,8 +12,11 @@
 [GIN-debug] POST   /internal/admin/init      --> seckill/internal/layer/controller.(*Handler).Init-fm (3 handlers)
 [GIN-debug] GET    /internal/admin/activity  --> seckill/internal/layer/controller.(*Handler).GetActivity-fm (3 handlers)
 [GIN-debug] POST   /internal/admin/activity  --> seckill/internal/layer/controller.(*Handler).UpdateActivity-fm (3 handlers)
-2026/03/25 08:01:51 layer listening on :8081
+[GIN-debug] GET    /internal/orders          --> seckill/internal/layer/controller.(*Handler).OrdersByUser-fm (3 handlers)
+2026/03/25 23:58:03 layer listening on :8081
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://github.com/gin-gonic/gin/blob/master/docs/doc.md#dont-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8081
-[GIN] 2026/03/25 - 08:01:51 | 200 | 68.177µs |       127.0.0.1 | GET      "/healthz"
+[GIN] 2026/03/25 - 23:58:03 | 200 | 80.121µs |       127.0.0.1 | GET      "/healthz"
+[GIN] 2026/03/25 - 23:58:14 | 409 |  10.89ms |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/25 - 23:58:31 | 200 |  14.62ms |       127.0.0.1 | GET      "/internal/orders?user_id=u100"

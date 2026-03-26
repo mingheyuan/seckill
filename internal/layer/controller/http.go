@@ -24,6 +24,26 @@ func (h *Handler) Register(r *gin.Engine) {
 	r.POST("/internal/admin/init",h.Init)
 	r.GET("/internal/admin/activity",h.GetActivity)
 	r.POST("/internal/admin/activity",h.UpdateActivity)
+	r.GET("/internal/orders",h.OrdersByUser)
+}
+
+func (h *Handler) OrdersByUser(c *gin.Context) {
+	userID :=c.Query("user_id")
+	if userID == "" {
+		c.JSON(http.StatusBadRequest,gin.H{"code": 400, "message": "user_id required"})
+		return
+	}
+
+	orders ,err:=h.core.ListOrdersByUser(userID)
+	if err !=nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "query failed"})
+        return
+	}
+
+	c.JSON(http.StatusOK,gin.H{
+		"code":0,
+		"orders":orders,
+	})
 }
 
 func (h *Handler) GetActivity(c *gin.Context) {

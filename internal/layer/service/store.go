@@ -8,4 +8,6 @@ type Store interface{
 	TryReserve(activityID int64,userID string) (ok bool,msg string)
 	RollbackReserve(activityID int64,userID string)
 	SaveOrder(req model.SeckillRequest)
+
+	ListOrdersByUser(userID string) ([]model.SeckillRequest,error)
 }

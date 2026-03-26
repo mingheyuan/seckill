@@ -8,6 +8,7 @@ import (
 
 const (
 	StorageMemory ="memory"
+	StorageMySQLRedis ="mysql-redis"
 )
 
 func NewStoreFromEnv() (Store,error) {
@@ -15,6 +16,15 @@ func NewStoreFromEnv() (Store,error) {
 	if engine =="" ||engine ==StorageMemory {
 		return NewMemoryStore(),nil
 	}
-
-	return nil,fmt.Errorf("unknow storage engine: %s",engine)
+	
+	switch engine {
+	case StorageMySQLRedis:
+		s,err :=NewMySQLRedisStoreFromEnv()
+		if err !=nil {
+			return nil,fmt.Errorf("init mysql-redis store failed: %w",err)
+		}
+		return s,nil
+	default:
+	return nil,fmt.Errorf("unknown storage engine: %s",engine)
+	}
 }

@@ -85,7 +85,7 @@ wait_health() {
   local url="$2"
 
   for _ in $(seq 1 40); do
-    if curl -fsS "${url}" >/dev/null 2>&1; then
+    if curl --noproxy '*' -fsS "${url}" >/dev/null 2>&1; then
       echo "${name} healthy: ${url}"
       return 0
     fi

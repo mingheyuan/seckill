@@ -20,6 +20,26 @@ func NewHandler(layer *proxysvc.LayerClient) *Handler {
 func (h *Handler) Register(r *gin.Engine) {
 	r.GET("/healthz",h.Healthz)
 	r.POST("/api/seckill",h.Seckill)
+	r.GET("/api/orders",h.OrdersByUser)
+}
+
+func (h *Handler) OrdersByUser(c *gin.Context) {
+	userID :=c.Query("user_id")
+	if userID =="" {
+		c.JSON(http.StatusBadGateway,gin.H{"code":400,"message":"user_id required"})
+		return
+	}
+
+	orders,err :=h.layer.OrdersByUser(userID)
+	if err !=nil {
+		c.JSON(http.StatusBadGateway,gin.H{"code":502,"message":"layer unavailable"})
+		return
+	}
+
+	c.JSON(http.StatusOK,gin.H{
+		"code":0,
+		"orders":orders,
+	})
 }
 
 func (h *Handler) Healthz(c *gin.Context) {

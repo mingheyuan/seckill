@@ -69,3 +69,16 @@ func (s *MemoryStore) SaveOrder(req model.SeckillRequest) {
 	defer s.mu.Unlock()
 	s.orders =append(s.orders,req)
 }
+
+func (s *MemoryStore)ListOrdersByUser(userID string) ([]model.SeckillRequest,error){
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	out :=make([]model.SeckillRequest,0,8)
+	for i:=range s.orders {
+		if s.orders[i].UserID ==userID {
+			out =append(out,s.orders[i])
+		}
+	}
+	return out,nil
+}

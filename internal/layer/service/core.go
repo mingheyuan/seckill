@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 	"sync"
+	"os"
 
 	"seckill/internal/common/model"
 	"seckill/internal/layer/queue"
@@ -47,6 +48,9 @@ func NewCore(ctx context.Context) *Core {
 	if err !=nil {
         log.Printf("init store failed, fallback to memory: %v", err)
 		s =NewMemoryStore()
+		log.Printf("store selected: %s (fallback)", StorageMemory)
+	} else {
+		log.Printf("store selected: %s", os.Getenv("LAYER_STORAGE_ENGINE"))
 	}
 	c:= &Core{
 		store:s,
@@ -155,3 +159,6 @@ func (c *Core) allowUser(userID string) bool {
 	return b.count<=c.userLimit
 }
 
+func (c *Core) ListOrdersByUser(userID string) ([]model.SeckillRequest,error) {
+	return c.store.ListOrdersByUser(userID)
+}
