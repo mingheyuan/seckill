@@ -2,6 +2,12 @@ package controller
 
 import (
 	"net/http"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
+	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"seckill/internal/common/model"
@@ -10,11 +16,22 @@ import (
 )
 
 type Handler struct {
-	layer *proxysvc.LayerClient
+	layer 				*proxysvc.LayerClient
+	requireSignature 	bool
+	signSecret 			string
+	maxSkewSec			int64
 }
 
-func NewHandler(layer *proxysvc.LayerClient) *Handler {
-	return &Handler{layer:layer}
+func NewHandler(layer *proxysvc.LayerClient,requireSignature bool,signSecret string,maxSkewSec int64) *Handler {
+	if maxSkewSec<=0 {
+		maxSkewSec =30
+	}
+	return &Handler{
+		layer:layer,
+		requireSignature:requireSignature,
+		signSecret:signSecret,
+		maxSkewSec:maxSkewSec,
+	}
 }
 
 func (h *Handler) Register(r *gin.Engine) {
@@ -53,6 +70,12 @@ func (h *Handler) Seckill(c *gin.Context) {
 		return
 	}
 
+	if h.requireSignature{
+		if !h.verifySignature(c,req) {
+			c.JSON(http.StatusUnauthorized,model.SeckillResponse{Code:401,Message:"invalid signature"})
+			return
+		}
+	}
 	ret,err := h.layer.Seckill(req)
 	if err != nil {
 		c.JSON(http.StatusBadGateway,model.SeckillResponse{Code:502,Message:"layer unavailable"})
@@ -74,4 +97,33 @@ func (h *Handler) Seckill(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK,model.SeckillResponse{Code:0,Message:"success"})
+}
+
+func (h *Handler) verifySignature(c *gin.Context,req model.SeckillRequest) bool {
+	tsText :=c.GetHeader("X-Timestamp")
+	signature :=c.GetHeader("X-Signature")
+	if tsText == "" || signature == ""{
+		return false
+	}
+
+
+	ts,err :=strconv.ParseInt(tsText,10,64)
+	if err !=nil {
+		return false
+	}
+
+	now :=time.Now().Unix()
+	delta := now -ts
+	if delta<0 {
+		delta =-delta
+	}
+	if delta >h.maxSkewSec {
+		return false
+	}
+
+	payload :=fmt.Sprintf("%s:%d:%d",req.UserID,req.ActivityID,ts)
+	mac :=hmac.New(sha256.New,[]byte(h.signSecret))
+	mac.Write([]byte(payload))
+	expected:=hex.EncodeToString(mac.Sum(nil))
+	return hmac.Equal([]byte(expected),[]byte(signature))
 }

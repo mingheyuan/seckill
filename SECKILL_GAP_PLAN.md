@@ -1,146 +1,495 @@
-# seckill 对比 newseckill 的差距与完善规划
+# seckill 补齐 newseckill 能力分阶段实施文档
 
 ## 1. 目标
 
-基于当前 `seckill` 与 `newseckill` 的实现差异，形成一份以“补齐能力、可验证收尾”为核心的迭代规划。
+本文件只关注一件事：把 newseckill 已具备、但 seckill 尚未完整具备的能力，按可落地、可验收、可回归的方式分阶段补齐。
 
-目标不是重写，而是：
+阶段规则与之前一致：
 
-- 保留当前 `seckill` 已跑通能力
-- 按优先级补齐 `newseckill` 已有而 `seckill` 仍缺失的能力
-- 每阶段都可落地、可验收、可回归
+- 每阶段都有高亮代码（可直接照着实现）
+- 每阶段都有验收命令和通过标准
+- 每阶段都有“前一步错误检验”（防止改完新功能把旧功能改坏）
 
----
+## 2. 差异清单（newseckill 有，seckill 缺或不完整）
 
-## 2. 对比结论（当前状态）
+### 2.1 接入安全策略
 
-### 2.1 已基本对齐（可继续沿用）
+- 集成限流（每 IP 每秒限流）
+- IP 黑白名单
+- 请求 ID 注入（便于链路追踪）
+- 可选签名校验（时间戳 + HMAC）
 
-- 三层服务（proxy/layer/admin）基础可运行
-- 活动开关与时间窗：`admin -> layer` 已生效
-- `mysql-redis` 引擎切换入口已具备（含 fallback）
-- 订单查询链路已打通（`/api/orders`）
-- etcd 热更新链路已验证（写 etcd 后不重启即可影响秒杀）
-- admin 更新活动自动同步 etcd 已验证
-- 发布门禁脚本已存在：`scripts/test_release_gate.sh`
+### 2.2 库存一致性与并发可靠性
 
-### 2.2 仍未补齐的核心差距（newseckill 有，seckill 仍缺）
+- Redis Lua 脚本原子扣减库存 + 原子累计用户购买次数
+- MySQL 持久化 + Redis 热数据双存储协作
+- 并发一致性集成测试（库存不超卖、同用户不重复）
 
-#### P0（必须尽快补）
+### 2.3 配置热更新与运维可观测
 
-1. MySQL+Redis 一致性实现不完整（仍有 fallback 兜底路径，未形成强一致策略）
-- newseckill 参考：`newseckill/backend/internal/layer/repository/mysql_redis.go`
-- seckill 现状：`seckill/internal/layer/service/mysql_redis_store.go`
-- 风险：高并发下可能出现“成功率异常低、状态不稳定、难定位一致性问题”
+- layer 通过 etcd watch 热更新活动配置
+- admin 发布活动到 etcd 带队列、重试、统计
+- 统一测试入口（Makefile + 门禁脚本）
 
-2. 自动化测试缺失（单测/集成测试）
-- newseckill 参考：
-  - `newseckill/backend/internal/layer/repository/repository_test.go`
-  - `newseckill/backend/internal/layer/repository/mysql_redis_integration_test.go`
-- seckill 现状：无 `*_test.go`
-- 风险：每次修改后只能人工验证，回归风险高
+## 3. 代码高亮对照
 
-3. 构建与测试标准化缺失（Makefile）
-- newseckill 参考：`newseckill/backend/Makefile`
-- seckill 现状：无 `Makefile`
-- 风险：缺统一入口，CI 不易接入
+> 本节是“可照写核心片段”。左侧是 newseckill 已验证实现，右侧是 seckill 当前状态。
 
-#### P1（本轮建议完成）
+### 3.1 安全中间件（Request ID + IP 黑白名单）
 
-4. 安全中间件缺失（RequestID / IP 控制 / 签名）
-- newseckill 参考：
-  - `newseckill/backend/internal/proxy/middleware/security.go`
-  - `newseckill/backend/internal/proxy/middleware/security_test.go`
-- seckill 现状：无 `internal/proxy/middleware`
-- 风险：API 易被重放/刷接口，排障关联困难
+newseckill 关键代码：
 
-5. Admin 发布器能力简化（缺同步统计与重试队列）
-- newseckill 参考：`newseckill/backend/internal/admin/service/activity_publisher.go`
-- seckill 现状：`seckill/internal/admin/service/etcd_pulisher.go`（建议修正命名为 publisher）
-- 风险：发布失败不可观测，无法快速定位配置不同步
+文件：newseckill/backend/internal/proxy/middleware/security.go
 
-6. 健康检查与运维接口标准化不足
-- newseckill 参考：统一 `/api/health`、`/internal/health`、`/admin/health`
-- seckill 现状：使用 `/healthz`
-- 风险：对接监控平台时需适配，运维一致性弱
+```go
+func RequestID() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.GetHeader("X-Request-ID")
+		if id == "" {
+			id = randomID()
+		}
+		c.Set("request_id", id)
+		c.Header("X-Request-ID", id)
+		c.Next()
+	}
+}
 
-#### P2（优化项）
+func IPAccessControl(whitelist, blacklist []string) gin.HandlerFunc {
+	white := toSet(whitelist)
+	black := toSet(blacklist)
+	return func(c *gin.Context) {
+		ip := c.ClientIP()
+		if _, blocked := black[ip]; blocked {
+			c.JSON(http.StatusForbidden, gin.H{"message": "ip is blocked"})
+			c.Abort()
+			return
+		}
+		if len(white) > 0 {
+			if _, ok := white[ip]; !ok {
+				c.JSON(http.StatusForbidden, gin.H{"message": "ip is not in whitelist"})
+				c.Abort()
+				return
+			}
+		}
+		c.Next()
+	}
+}
+```
 
-7. 配置工程化程度不足（集中 config 包）
-- newseckill 参考：`internal/*/config/config.go`
-- seckill 现状：仍有部分硬编码路径/默认值
+seckill 当前状态：
 
-8. 负载测试工具化不足（k6）
-- newseckill 参考：`newseckill/backend/bench/k6_seckill.js`
-- seckill 现状：shell 并发脚本为主
+- 目录里没有独立中间件目录：seckill/internal/proxy/middleware
+- 入口只做了基础路由注册：seckill/cmd/proxy/main.go
 
----
+### 3.2 限流中间件（每 IP 每秒）
 
-## 3. 完善路线图（分阶段 + 验收）
+newseckill 关键代码：
 
-## 阶段 A（P0）：一致性与测试基线
+文件：newseckill/backend/internal/proxy/middleware/ratelimit.go
 
-### A1. 强化 mysql-redis 一致性策略
+```go
+func (r *RateLimiter) Handler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		now := time.Now().Unix()
+		ip := c.ClientIP()
 
-改造点：
+		r.mu.Lock()
+		b, ok := r.m[ip]
+		if !ok {
+			b = &bucket{timestamp: now, count: 1}
+			r.m[ip] = b
+			r.mu.Unlock()
+			c.Next()
+			return
+		}
 
-- 将 `mysql_redis_store` 从“fallback 可用”升级为“可配置强一致模式”
-- 为关键路径增加失败原因统计（sold out / duplicate / busy）
-- 保证库存、订单、重复购买标记在异常下可回滚或可追踪
+		if b.timestamp != now {
+			b.timestamp = now
+			b.count = 1
+			r.mu.Unlock()
+			c.Next()
+			return
+		}
 
-建议文件：
+		b.count++
+		allow := b.count <= r.limit
+		r.mu.Unlock()
 
-- `seckill/internal/layer/service/mysql_redis_store.go`
+		if !allow {
+			c.JSON(429, gin.H{"message": "请求过于频繁，请稍后重试"})
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
+}
+```
 
-验收命令：
+seckill 当前状态：
+
+- 没有 proxy 层全局中间件限流，只有 layer/core 内部按 userID 的轻量频控
+
+### 3.3 签名校验（可开关）
+
+newseckill 关键代码：
+
+文件：newseckill/backend/internal/proxy/controller/handler.go
+
+```go
+if h.cfg.RequireSignature {
+	if !h.verifySignature(c, req) {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "签名校验失败"})
+		return
+	}
+}
+
+func (h *Handler) verifySignature(c *gin.Context, req model.SeckillRequest) bool {
+	timestampText := c.GetHeader("X-Timestamp")
+	signature := c.GetHeader("X-Signature")
+	if timestampText == "" || signature == "" {
+		return false
+	}
+	...
+	payload := fmt.Sprintf("%d:%d:%d", req.UserID, req.ProductID, ts)
+	mac := hmac.New(sha256.New, []byte(h.cfg.SignSecret))
+	mac.Write([]byte(payload))
+	expected := hex.EncodeToString(mac.Sum(nil))
+	return hmac.Equal([]byte(expected), []byte(signature))
+}
+```
+
+seckill 当前状态：
+
+- seckill/internal/proxy/controller/http.go 没有签名校验流程
+- seckill/cmd/proxy/main.go 没有签名开关配置
+
+### 3.4 Redis Lua 原子扣减库存 + 防重复
+
+newseckill 关键代码：
+
+文件：newseckill/backend/internal/layer/repository/mysql_redis.go
+
+```go
+const acquireScript = `
+local stock = redis.call('GET', KEYS[1])
+if (not stock) then
+  return 0
+end
+stock = tonumber(stock)
+if stock <= 0 then
+  return 0
+end
+local uid = tostring(ARGV[1])
+local limit = tonumber(ARGV[2])
+local c = tonumber(redis.call('HGET', KEYS[2], uid) or '0')
+if c >= limit then
+  return 1
+end
+redis.call('DECR', KEYS[1])
+redis.call('HINCRBY', KEYS[2], uid, 1)
+return 2
+`
+```
+
+seckill 当前状态：
+
+- seckill/internal/layer/service/mysql_redis_store.go 仍是 SetNX + Decr 两步，非 Lua 单脚本
+- SaveOrder 失败时 fallback 到 memory，存在双写语义复杂度
+
+### 3.5 etcd 发布器（重试 + 统计）
+
+newseckill 关键代码：
+
+文件：newseckill/backend/internal/admin/service/activity_publisher.go
+
+```go
+type PublishStats struct {
+	Enabled        bool      `json:"enabled"`
+	QueueLen       int       `json:"queueLen"`
+	QueueCap       int       `json:"queueCap"`
+	QueuedTotal    uint64    `json:"queuedTotal"`
+	PublishedTotal uint64    `json:"publishedTotal"`
+	FailedTotal    uint64    `json:"failedTotal"`
+	DroppedTotal   uint64    `json:"droppedTotal"`
+	LastError      string    `json:"lastError,omitempty"`
+	LastErrorAt    time.Time `json:"lastErrorAt,omitempty"`
+	LastSuccessAt  time.Time `json:"lastSuccessAt,omitempty"`
+}
+
+func (p *EtcdActivityPublisher) PublishActivity(ctx context.Context, cfg model.ActivityConfig) error {
+	select {
+	case p.queue <- cfg:
+		p.queuedTotal.Add(1)
+		return nil
+	default:
+		p.droppedTotal.Add(1)
+		p.setLastError(ErrPublishQueueFull.Error())
+		return ErrPublishQueueFull
+	}
+}
+```
+
+seckill 当前状态：
+
+- seckill/internal/admin/service/etcd_pulisher.go 仅同步 put，无队列/重试/统计
+
+### 3.6 并发一致性集成测试
+
+newseckill 关键代码：
+
+文件：newseckill/backend/internal/layer/repository/mysql_redis_integration_test.go
+
+```go
+func TestMySQLRedisConcurrentStockConsistency(t *testing.T) {
+	...
+	for i := 0; i < 200; i++ {
+		uid := int64(100000 + i)
+		wg.Add(1)
+		go func(userID int64) {
+			defer wg.Done()
+			p, err := store.TryAcquire(productID, userID)
+			if err == nil {
+				success.Add(1)
+				store.SaveOrder(NewOrder(p.ID, userID, p.Price))
+			}
+		}(uid)
+	}
+	...
+	if success.Load() != stock {
+		t.Fatalf("success should equal stock, want=%d got=%d", stock, success.Load())
+	}
+}
+```
+
+seckill 当前状态：
+
+- 缺少 *_test.go 的并发一致性自动测试
+
+## 4. 分阶段实施计划（每阶段含前置回归）
+
+## 阶段 1：补齐 proxy 安全骨架
+
+### 实施目标
+
+补齐 Request ID、IP 黑白名单、全局限流，并挂到 proxy 入口。
+
+### 需改文件
+
+- 新增：seckill/internal/proxy/middleware/security.go
+- 新增：seckill/internal/proxy/middleware/ratelimit.go
+- 修改：seckill/cmd/proxy/main.go
+
+### 最小落地步骤
+
+1. 创建 RequestID 与 IPAccessControl 中间件（可直接复用 3.1 逻辑）
+2. 创建 NewRateLimiter(limit).Handler()（可直接复用 3.2 逻辑）
+3. 在 proxy 启动处按顺序挂载：RequestID -> IPAccessControl -> RateLimiter
+
+### 验收命令
+
+```bash
+cd /home/yuan/test_sum_seckill_concurrence/seckill
+bash ./scripts/start.sh restart
+
+curl --noproxy '*' -si http://127.0.0.1:8080/healthz | head
+curl --noproxy '*' -si -H 'X-Forwarded-For: 1.2.3.4' http://127.0.0.1:8080/api/orders?user_id=u1 | head
+```
+
+### 通过标准
+
+- 响应头带 X-Request-ID
+- 黑名单 IP 返回 403
+- 正常请求不受影响
+
+### 前一步错误检验（基线回归）
+
+```bash
+bash ./scripts/test_user_buy_twice.sh
+```
+
+- 预期：同用户重复购买第二次失败
+- 若失败，先回看是否误改 proxy 请求参数名（user_id/activity_id）
+
+## 阶段 2：补齐签名校验（可开关）
+
+### 实施目标
+
+把签名校验作为可配置能力，默认关闭，灰度开启。
+
+### 需改文件
+
+- 修改：seckill/internal/proxy/controller/http.go
+- 修改：seckill/cmd/proxy/main.go
+- 建议新增：seckill/internal/proxy/config/config.go
+
+### 最小落地步骤
+
+1. 新增环境变量：
+- PROXY_REQUIRE_SIGNATURE（默认 false）
+- PROXY_SIGN_SECRET
+- PROXY_SIGN_MAX_SKEW_SEC
+2. 在 Seckill handler 中，解析请求后按开关执行 verifySignature
+3. 签名算法按 newseckill 对齐：payload=userID:activityID:timestamp，HMAC-SHA256
+
+### 验收命令
+
+```bash
+# 1) 开关关闭：应可正常下单
+curl --noproxy '*' -s -X POST http://127.0.0.1:8080/api/seckill \
+  -H 'Content-Type: application/json' \
+  -d '{"user_id":"sig_u1","activity_id":1001}'
+
+# 2) 开关开启且未带签名：应返回未授权
+PROXY_REQUIRE_SIGNATURE=true bash ./scripts/start.sh restart
+curl --noproxy '*' -si -X POST http://127.0.0.1:8080/api/seckill \
+  -H 'Content-Type: application/json' \
+  -d '{"user_id":"sig_u2","activity_id":1001}' | head
+```
+
+### 通过标准
+
+- 开关关闭时行为兼容旧版本
+- 开关开启时无签名请求被拒绝
+
+### 前一步错误检验（阶段 1 回归）
+
+- 403 与 429 行为仍符合预期
+- X-Request-ID 不丢失
+
+## 阶段 3：库存扣减升级为 Lua 原子脚本
+
+### 实施目标
+
+把 seckill 的 TryReserve 从多命令流程升级为 Lua 原子流程，减少并发竞态与补偿复杂度。
+
+### 需改文件
+
+- 修改：seckill/internal/layer/service/mysql_redis_store.go
+
+### 最小落地步骤
+
+1. 引入 Lua 脚本（参考 3.4）
+2. Eval 返回码约定：
+- 0: 售罄
+- 1: 重复购买
+- 2: 成功
+3. 保留 rollback 逻辑用于“队列提交失败”场景
+
+### 验收命令
 
 ```bash
 cd /home/yuan/test_sum_seckill_concurrence/seckill/scripts
-./test_release_gate.sh
+bash ./test_release_gate.sh
 ```
 
-通过标准：
+### 通过标准
 
-- `stock_after >= 0`
-- `success <= STOCK`
-- 输出失败类型统计，且可解释
+- success <= STOCK
+- stock_after >= 0
+- 无明显异常日志风暴（redis eval error 连续刷屏）
 
-### A2. 建立单测与集成测试
+### 前一步错误检验（阶段 2 回归）
 
-改造点：
+- 签名开关开/关行为保持不变
+- 限流和黑白名单逻辑不受影响
 
-- 补 `memory_store`、`core`、`etcd_activity`、`security` 的单测
-- 补 mysql-redis 并发一致性集成测试
+## 阶段 4：补齐并发一致性自动化测试
 
-建议文件：
+### 实施目标
 
-- `seckill/internal/layer/service/*_test.go`
-- `seckill/internal/proxy/middleware/*_test.go`
-- `seckill/internal/layer/service/mysql_redis_integration_test.go`
+把“肉眼看日志”升级为“go test 可重复证明一致性”。
 
-验收命令：
+### 需改文件
+
+- 新增：seckill/internal/layer/service/mysql_redis_integration_test.go
+- 新增：seckill/internal/proxy/middleware/security_test.go
+
+### 最小落地步骤
+
+1. 参考 newseckill 的并发测试结构，至少覆盖：
+- 并发抢购成功数等于库存
+- 同用户高并发仅成功 1 次
+2. 为 security 中间件补单测：
+- 黑名单拦截
+- RequestID 注入
+
+### 验收命令
 
 ```bash
 cd /home/yuan/test_sum_seckill_concurrence/seckill
 go test ./... -v
 ```
 
-通过标准：
+### 通过标准
 
-- `go test ./...` 全绿
-- 集成测试可用环境下可重复通过
+- 所有新增测试稳定通过
+- 测试失败日志可直接定位到断言
 
-### A3. 增加 Makefile 统一入口
+### 前一步错误检验（阶段 3 回归）
 
-改造点：
+- release gate 仍通过
+- 活动关闭时继续返回 activity not open
 
-- 标准化命令：`make test` / `make test-integration` / `make run` / `make gate`
+## 阶段 5：补齐 admin etcd 发布器可靠性
 
-建议文件：
+### 实施目标
 
-- `seckill/Makefile`
+把 admin 的 etcd 发布从“同步单次 put”升级为“异步队列 + 重试 + 统计”。
 
-验收命令：
+### 需改文件
+
+- 修改：seckill/internal/admin/service/etcd_pulisher.go（建议重命名为 etcd_publisher.go）
+- 修改：seckill/internal/admin/controller/http.go（新增统计接口）
+
+### 最小落地步骤
+
+1. 增加 PublishStats 结构体
+2. 增加发布队列和后台 worker
+3. 增加重试次数、重试间隔配置
+4. 暴露 /admin/activity/sync/stats
+
+### 验收命令
+
+```bash
+curl --noproxy '*' -s http://127.0.0.1:8082/admin/activity/sync/stats
+```
+
+### 通过标准
+
+- 能看到 queueLen/PublishedTotal/FailedTotal/LastError 等指标
+- etcd 短暂异常后恢复，发布可继续成功
+
+### 前一步错误检验（阶段 4 回归）
+
+```bash
+go test ./... -v
+bash ./scripts/test_activity.sh
+```
+
+- 预期：活动变更仍能实时生效，且测试仍全绿
+
+## 阶段 6：工程化收口（Makefile + 统一门禁）
+
+### 实施目标
+
+把阶段成果固化为统一执行入口，避免“会的人才能跑”。
+
+### 需改文件
+
+- 新增：seckill/Makefile
+- 修改：seckill/scripts/test_release_gate.sh
+
+### 最小落地步骤
+
+1. 参考 newseckill/backend/Makefile 增加目标：
+- make test
+- make test-integration
+- make gate
+2. 强化 gate 输出：
+- success/fail 分类统计
+- 失败类型分桶（sold out/duplicate/system busy/activity not open）
+
+### 验收命令
 
 ```bash
 cd /home/yuan/test_sum_seckill_concurrence/seckill
@@ -148,134 +497,34 @@ make test
 make gate
 ```
 
-通过标准：
+### 通过标准
 
-- 命令稳定可复现
-- 门禁失败时返回非 0 退出码
+- 两条命令都可在干净环境重复执行
+- gate 失败时返回非 0，成功时返回 0
 
----
+### 前一步错误检验（阶段 5 回归）
 
-## 阶段 B（P1）：安全与可观测
+- /admin/activity/sync/stats 可访问
+- etcd 热更新链路不回退
 
-### B1. 引入 proxy 安全中间件
+## 5. 阶段完成定义（DoD）
 
-改造点：
+每阶段都必须满足：
 
-- Request ID 注入
-- IP 黑白名单
-- 可选签名校验（开关控制）
+1. 代码：功能实现并可运行
+2. 验证：验收命令可复现通过
+3. 回归：前一步错误检验通过
+4. 文档：本文件对应阶段状态更新为“已完成”
 
-建议文件：
+建议增加一列阶段状态：
 
-- `seckill/internal/proxy/middleware/security.go`
-- `seckill/internal/proxy/controller/http.go`
-- `seckill/cmd/proxy/main.go`
-
-验收命令：
-
-```bash
-# 关闭签名校验可正常调用
-curl --noproxy '*' -s http://127.0.0.1:8080/healthz
-
-# 开启签名后，未签名请求应拒绝
-```
-
-通过标准：
-
-- 关闭开关不影响现网
-- 开启开关后规则正确生效
-
-### B2. admin etcd 发布统计与重试
-
-改造点：
-
-- 增加发布队列长度、成功/失败计数、最后错误
-- 增加重试策略
-
-建议文件：
-
-- `seckill/internal/admin/service/etcd_publisher.go`（建议统一命名）
-- `seckill/internal/admin/controller/http.go`
-
-验收命令：
-
-```bash
-curl --noproxy '*' -s http://127.0.0.1:8082/admin/activity/sync/stats
-```
-
-通过标准：
-
-- 可观测发布状态
-- etcd 短暂抖动时有重试且不阻塞主流程
-
-### B3. 健康检查端点标准化
-
-改造点：
-
-- 保留 `/healthz` 兼容旧脚本
-- 新增标准端点：
-  - `/api/health`
-  - `/internal/health`
-  - `/admin/health`
-
-验收命令：
-
-```bash
-curl --noproxy '*' -s http://127.0.0.1:8080/api/health
-curl --noproxy '*' -s http://127.0.0.1:8081/internal/health
-curl --noproxy '*' -s http://127.0.0.1:8082/admin/health
-```
-
-通过标准：
-
-- 三端点均返回 200
-- 旧 `/healthz` 不破坏现有脚本
+- [ ] 阶段 1
+- [ ] 阶段 2
+- [ ] 阶段 3
+- [ ] 阶段 4
+- [ ] 阶段 5
+- [ ] 阶段 6
 
 ---
 
-## 阶段 C（P2）：工程化完善
-
-### C1. 配置集中化
-
-改造点：
-
-- 新建 `internal/{proxy,layer,admin}/config` 包
-- 将环境变量读取统一收敛
-
-### C2. 压测工具化（k6）
-
-改造点：
-
-- 补 `bench/k6_seckill.js`
-- 增加 `scripts/load_test.sh`
-
-### C3. 文档与SOP
-
-改造点：
-
-- 增加“上线前检查清单”
-- 增加“回滚操作手册”
-
----
-
-## 4. 建议的最终交付件
-
-- `seckill/SECKILL_GAP_PLAN.md`（本文件）
-- `seckill/Makefile`
-- `seckill/scripts/test_release_gate.sh`（强门禁版）
-- `seckill/scripts/test_activity.sh`（活动热更新验收）
-- `seckill/scripts/testredis_mysql.sh`（持久化验收）
-- `seckill/internal/**/_test.go`（基础单测 + 集成测试）
-
----
-
-## 5. 当前结论
-
-当前 `seckill` 已跨过“能跑”阶段，进入“可稳定发布”阶段。
-后续核心不是继续堆功能，而是优先补齐：
-
-1. 一致性强校验
-2. 自动化测试
-3. 发布门禁标准化
-
-完成上述 P0 后，再进入 P1/P2，才能把 `seckill` 真正补齐到接近 `newseckill` 的工程成熟度。
+如果你要我继续，我可以直接按这个文档从“阶段 1”开始落代码，并且每完成一步都给你：改动文件、关键 diff、验收命令输出和回归结果。

@@ -1,5 +1,4 @@
-2026/03/26 03:39:39 mysql-redis store enabled: redis=127.0.0.1:6379
-2026/03/26 03:39:39 store selected: mysql-redis
+2026/03/27 09:04:14 store selected: 
 [GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
 
 [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
@@ -13,419 +12,71 @@
 [GIN-debug] GET    /internal/admin/activity  --> seckill/internal/layer/controller.(*Handler).GetActivity-fm (3 handlers)
 [GIN-debug] POST   /internal/admin/activity  --> seckill/internal/layer/controller.(*Handler).UpdateActivity-fm (3 handlers)
 [GIN-debug] GET    /internal/orders          --> seckill/internal/layer/controller.(*Handler).OrdersByUser-fm (3 handlers)
-2026/03/26 03:39:39 layer listening on :8081
+2026/03/27 09:04:14 layer listening on :8081
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://github.com/gin-gonic/gin/blob/master/docs/doc.md#dont-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8081
-[GIN] 2026/03/26 - 03:39:39 | 200 |  21.76µs |       127.0.0.1 | GET      "/healthz"
-[GIN] 2026/03/26 - 03:39:45 | 200 | 205.329µs |       127.0.0.1 | POST     "/internal/admin/activity"
-2026/03/26 03:39:45 etcd activity applied from key=/seckill/activity/config
-[GIN] 2026/03/26 - 03:39:45 | 409 | 104.372µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:39:45 | 200 | 84.997µs |       127.0.0.1 | POST     "/internal/admin/activity"
-2026/03/26 03:39:45 etcd activity applied from key=/seckill/activity/config
-[GIN] 2026/03/26 - 03:39:47 | 200 | 256.843µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:39:47 persist order user=admin_sync_open activity=1001
-[GIN] 2026/03/26 - 03:47:45 | 200 | 702.408µs |       127.0.0.1 | POST     "/internal/admin/init"
-[GIN] 2026/03/26 - 03:47:45 | 200 | 68.519µs |       127.0.0.1 | POST     "/internal/admin/activity"
-2026/03/26 03:47:45 etcd activity applied from key=/seckill/activity/config
-[GIN] 2026/03/26 - 03:47:45 | 200 | 763.818µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:45 | 200 |   3.71ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:45 | 200 |   3.14ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:45 | 200 | 343.367µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:45 | 200 |   4.06ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:45 | 200 |   1.41ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:45 | 200 |  20.75ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:45 | 200 |  20.18ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:45 | 200 |  19.99ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:45 | 200 |  19.94ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:45 persist order user=gate_u5 activity=1001
-[GIN] 2026/03/26 - 03:47:45 | 200 |  81.74ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:45 | 200 |  21.42ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:45 | 200 |  84.16ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:45 | 200 |  84.18ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u6 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u3 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u16 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u1 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u51 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u8 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u36 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u7 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u4 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u29 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u10 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u2 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u15 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 200 | 311.84ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 311.87ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 312.53ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 312.56ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 316.72ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u12 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u11 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u9 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u43 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 200 | 297.32ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 297.29ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 298.32ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 298.32ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 299.83ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 298.38ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 298.35ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 231.81ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 182.83ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 181.71ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 184.22ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u13 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 200 |  50.65ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.24ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  50.65ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   50.9ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   8.88ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  50.89ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |    8.9ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  50.89ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.13ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  50.86ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 318.19ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.21ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.04ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.22ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.23ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.03ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  50.92ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  50.56ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 164.95ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   51.6ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 166.69ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |    9.3ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.69ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.16ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u19 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 200 |  65.12ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.02ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   51.5ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.79ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 167.91ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.83ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.84ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 175.17ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |    9.6ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.05ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 167.77ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.07ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 124.28ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.94ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 167.27ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.59ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   51.5ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.91ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.76ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.43ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.49ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 165.21ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.77ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.46ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.64ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.73ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  52.04ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.52ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.99ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 165.53ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  52.05ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.88ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 319.06ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  75.27ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.93ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.85ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  85.79ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.75ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |     93ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |   9.64ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 173.86ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 322.29ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 177.62ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 168.04ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 167.68ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 167.78ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 170.18ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 |  51.21ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 177.39ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  11.46ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.53ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  11.74ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.65ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.22ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  11.79ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  172.7ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.76ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 200 | 167.77ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 180.98ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   7.22ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  11.89ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.96ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.77ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.18ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 170.67ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  171.8ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.65ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.74ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.76ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.41ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 179.02ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |    179ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u30 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.01ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 178.31ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 182.61ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 182.79ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u47 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.09ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.28ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.71ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  11.96ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 181.12ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.22ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 184.99ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |    181ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 172.45ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.16ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 172.44ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 181.24ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.19ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 178.92ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   13.1ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.08ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 178.11ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.53ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   13.2ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.47ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.05ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.96ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 172.36ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 172.14ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  11.93ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  177.7ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  171.3ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 173.02ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.55ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.07ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.63ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   8.42ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  30.03ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  30.07ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.24ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 172.92ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 174.35ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.61ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.02ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 173.42ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |     14ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.63ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.43ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.36ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   13.8ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.31ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  14.12ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u50 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u41 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 |  14.21ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   14.1ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.21ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 178.67ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 178.54ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.38ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.41ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.64ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.25ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.42ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   12.3ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  30.12ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 172.87ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.28ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.45ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 177.86ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.91ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  14.08ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.56ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  14.39ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 174.95ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.52ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  14.07ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   8.57ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.54ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.61ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   8.56ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u52 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.77ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u35 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 | 174.85ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  173.4ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.56ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   14.2ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.47ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 171.62ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 173.54ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.57ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.42ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.34ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.36ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  14.23ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 185.86ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  14.39ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.35ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 178.42ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.38ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.69ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.64ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u45 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.33ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.96ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.34ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.53ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   8.49ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.33ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.94ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.61ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.68ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   8.71ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 178.41ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.96ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u24 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 |  14.69ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u37 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.92ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  14.75ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u83 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 | 178.87ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.72ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.72ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.92ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   14.4ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 178.75ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.88ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 178.99ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.02ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 183.88ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 173.16ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.98ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 185.83ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.83ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  14.53ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.91ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  12.72ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 178.35ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.07ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  178.8ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 170.04ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |  13.98ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 726.237µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 419.093µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 769.888µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 496.289µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u82 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 | 448.639µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 772.795µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 950.334µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 315.664µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 787.628µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |      1ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 362.131µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   1.06ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 436.773µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u246 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u126 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u185 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u128 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 |   10.8ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u33 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u249 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u56 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 |     21ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u125 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 | 553.302µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u77 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 | 490.534µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u242 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u190 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 | 518.486µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 704.677µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 698.515µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 752.688µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 871.942µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u42 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u151 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u179 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 | 556.658µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 486.256µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 589.901µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 468.962µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 648.991µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 717.821µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u248 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u225 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 |    1.6ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   1.41ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 | 905.78µs |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |    1.5ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   1.59ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   1.51ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   1.58ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   1.58ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   1.83ms |       127.0.0.1 | POST     "/internal/seckill"
-[GIN] 2026/03/26 - 03:47:46 | 409 |   1.88ms |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u193 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u214 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u209 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u230 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u53 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u88 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u195 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u148 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u153 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 409 | 836.044µs |       127.0.0.1 | POST     "/internal/seckill"
-2026/03/26 03:47:46 persist order user=gate_u146 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u218 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u98 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u196 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u182 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u235 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u25 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u46 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u213 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u100 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u131 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u203 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u117 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u103 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u55 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u240 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u135 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u198 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u118 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u85 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u147 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u73 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u96 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u243 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u244 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u239 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u216 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u94 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u17 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u132 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u99 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u44 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u68 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u38 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u178 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u223 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u220 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u28 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u79 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u163 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u152 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u162 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u217 activity=1001
-2026/03/26 03:47:46 persist order user=gate_u138 activity=1001
-[GIN] 2026/03/26 - 03:47:46 | 200 | 179.147µs |       127.0.0.1 | GET      "/internal/stock?activity_id=1001"
+[GIN] 2026/03/27 - 09:04:14 | 200 | 19.426µs |       127.0.0.1 | GET      "/healthz"
+[GIN] 2026/03/27 - 09:04:23 | 200 | 304.003µs |       127.0.0.1 | POST     "/internal/seckill"
+2026/03/27 09:04:23 persist order user=u2 activity=1001
+[GIN] 2026/03/27 - 09:04:37 | 200 | 141.527µs |       127.0.0.1 | POST     "/internal/admin/init"
+[GIN] 2026/03/27 - 09:04:37 | 200 | 33.302µs |       127.0.0.1 | GET      "/internal/stock?activity_id=1001"
+[GIN] 2026/03/27 - 09:04:38 | 200 | 52.289µs |       127.0.0.1 | GET      "/internal/stock?activity_id=1001"
+[GIN] 2026/03/27 - 09:11:00 | 200 | 109.066µs |       127.0.0.1 | POST     "/internal/admin/init"
+[GIN] 2026/03/27 - 09:11:00 | 200 | 44.594µs |       127.0.0.1 | GET      "/internal/stock?activity_id=1001"
+[GIN] 2026/03/27 - 09:11:00 | 200 | 65.744µs |       127.0.0.1 | POST     "/internal/seckill"
+2026/03/27 09:11:00 persist order user=u1 activity=1001
+[GIN] 2026/03/27 - 09:11:00 | 409 | 41.899µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 200 | 29.957µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 200 | 149.222µs |       127.0.0.1 | POST     "/internal/seckill"
+2026/03/27 09:11:00 persist order user=u2 activity=1001
+[GIN] 2026/03/27 - 09:11:00 | 200 | 24.376µs |       127.0.0.1 | POST     "/internal/seckill"
+2026/03/27 09:11:00 persist order user=u5 activity=1001
+2026/03/27 09:11:00 persist order user=u3 activity=1001
+[GIN] 2026/03/27 - 09:11:00 | 200 | 718.923µs |       127.0.0.1 | POST     "/internal/seckill"
+2026/03/27 09:11:00 persist order user=u8 activity=1001
+[GIN] 2026/03/27 - 09:11:00 | 409 | 729.911µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 | 122.421µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 | 154.937µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 | 36.319µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 | 42.009µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 | 140.294µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 | 11.101µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 | 39.635µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 |  6.553µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 |  8.416µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 |  7.955µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 | 45.576µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 | 36.539µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 | 16.541µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:00 | 409 | 40.306µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:01 | 200 |   58.5µs |       127.0.0.1 | GET      "/internal/stock?activity_id=1001"
+[GIN] 2026/03/27 - 09:11:15 | 200 |  68.99µs |       127.0.0.1 | POST     "/internal/admin/init"
+[GIN] 2026/03/27 - 09:11:15 | 200 | 36.609µs |       127.0.0.1 | GET      "/internal/stock?activity_id=1001"
+[GIN] 2026/03/27 - 09:11:16 | 200 | 50.155µs |       127.0.0.1 | POST     "/internal/seckill"
+2026/03/27 09:11:16 persist order user=u1 activity=1001
+[GIN] 2026/03/27 - 09:11:16 | 409 | 52.169µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 200 | 44.705µs |       127.0.0.1 | POST     "/internal/seckill"
+2026/03/27 09:11:16 persist order user=u6 activity=1001
+2026/03/27 09:11:16 persist order user=u3 activity=1001
+[GIN] 2026/03/27 - 09:11:16 | 200 | 44.775µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 200 | 27.051µs |       127.0.0.1 | POST     "/internal/seckill"
+2026/03/27 09:11:16 persist order user=u4 activity=1001
+[GIN] 2026/03/27 - 09:11:16 | 200 | 91.773µs |       127.0.0.1 | POST     "/internal/seckill"
+2026/03/27 09:11:16 persist order user=u7 activity=1001
+[GIN] 2026/03/27 - 09:11:16 | 409 |  9.177µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 12.704µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 |  6.412µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 32.822µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 23.204µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 12.133µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 14.147µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 16.511µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 30.027µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 40.246µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 20.428µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 19.327µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 33.383µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 50.335µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 409 | 28.354µs |       127.0.0.1 | POST     "/internal/seckill"
+[GIN] 2026/03/27 - 09:11:16 | 200 | 38.773µs |       127.0.0.1 | GET      "/internal/stock?activity_id=1001"
