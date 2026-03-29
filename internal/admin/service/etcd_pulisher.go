@@ -3,8 +3,11 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"time"
 
 	"seckill/internal/common/model"
@@ -14,8 +17,32 @@ import (
 
 type EtcdPublisher struct {
 	enabled bool
-	key 	string
-	cli 	*clientv3.Client
+	key     string
+	cli     *clientv3.Client
+	queue   chan model.ActivityConfig
+	maxRetries int
+	retryInterval time.Duration
+	queuedTotal   atomic.Uint64
+	publishedTotal atomic.Uint64
+	failedTotal   atomic.Uint64
+	droppedTotal  atomic.Uint64
+	mu            sync.RWMutex
+	lastError     string
+	lastErrorAt   time.Time
+	lastSuccessAt time.Time
+}
+
+type PublishStats struct {
+	Enabled        bool      `json:"enabled"`
+	QueueLen       int       `json:"queueLen"`
+	QueueCap       int       `json:"queueCap"`
+	QueuedTotal    uint64    `json:"queuedTotal"`
+	PublishedTotal uint64    `json:"publishedTotal"`
+	FailedTotal    uint64    `json:"failedTotal"`
+	DroppedTotal   uint64    `json:"droppedTotal"`
+	LastError      string    `json:"lastError,omitempty"`
+	LastErrorAt    time.Time `json:"lastErrorAt,omitempty"`
+	LastSuccessAt  time.Time `json:"lastSuccessAt,omitempty"`
 }
 
 func NewEtcdPublisherFromEnv() (*EtcdPublisher,error) {
@@ -52,11 +79,30 @@ func NewEtcdPublisherFromEnv() (*EtcdPublisher,error) {
 		return nil,err
 	}
 
-	return &EtcdPublisher{
+	queueSize := envIntOr("ADMIN_ETCD_QUEUE_SIZE",256)
+	if queueSize <= 0 {
+		queueSize = 256
+	}
+	retries := envIntOr("ADMIN_ETCD_PUBLISH_RETRIES",3)
+	if retries < 0 {
+		retries = 0
+	}
+	interval := time.Duration(envIntOr("ADMIN_ETCD_RETRY_INTERVAL_MS",300)) * time.Millisecond
+	if interval <= 0 {
+		interval = 300 * time.Millisecond
+	}
+
+	p := &EtcdPublisher{
         enabled: true,
         key:     key,
         cli:     cli,
-    }, nil
+		queue:   make(chan model.ActivityConfig, queueSize),
+		maxRetries: retries,
+		retryInterval: interval,
+    }
+
+	go p.startWorker(context.Background())
+	return p, nil
 }
 
 func (p *EtcdPublisher) PublishActivity(cfg model.ActivityConfig) error {
@@ -64,14 +110,97 @@ func (p *EtcdPublisher) PublishActivity(cfg model.ActivityConfig) error {
         return nil
     }
 
+	select {
+	case p.queue <- cfg:
+		p.queuedTotal.Add(1)
+		return nil
+	default:
+		p.droppedTotal.Add(1)
+		p.setLastError("etcd publish queue full")
+		return fmt.Errorf("etcd publish queue full")
+	}
+}
+
+func (p *EtcdPublisher) Stats() PublishStats {
+	if p == nil || !p.enabled {
+		return PublishStats{Enabled:false}
+	}
+
+	p.mu.RLock()
+	defer p.mu.RUnlock()
+	return PublishStats{
+		Enabled: true,
+		QueueLen: len(p.queue),
+		QueueCap: cap(p.queue),
+		QueuedTotal: p.queuedTotal.Load(),
+		PublishedTotal: p.publishedTotal.Load(),
+		FailedTotal: p.failedTotal.Load(),
+		DroppedTotal: p.droppedTotal.Load(),
+		LastError: p.lastError,
+		LastErrorAt: p.lastErrorAt,
+		LastSuccessAt: p.lastSuccessAt,
+	}
+}
+
+func (p *EtcdPublisher) startWorker(ctx context.Context) {
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case cfg := <-p.queue:
+			p.publishWithRetry(cfg)
+		}
+	}
+}
+
+func (p *EtcdPublisher) publishWithRetry(cfg model.ActivityConfig) {
     raw, err := json.Marshal(cfg)
     if err != nil {
-        return err
+		p.failedTotal.Add(1)
+		p.setLastError(fmt.Sprintf("marshal activity config failed: %v", err))
+        return
     }
 
-    ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-    defer cancel()
+	ctx := context.Background()
+	var lastErr error
+	for i := 0; i <= p.maxRetries; i++ {
+		_, err = p.cli.Put(ctx, p.key, string(raw))
+		if err == nil {
+			p.publishedTotal.Add(1)
+			p.setLastSuccess()
+			return
+		}
+		lastErr = err
+		if i < p.maxRetries {
+			time.Sleep(p.retryInterval)
+		}
+	}
 
-    _, err = p.cli.Put(ctx, p.key, string(raw))
-    return err
+	p.failedTotal.Add(1)
+	p.setLastError(fmt.Sprintf("publish activity failed after retries: %v", lastErr))
+}
+
+func (p *EtcdPublisher) setLastError(msg string) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	p.lastError = msg
+	p.lastErrorAt = time.Now()
+}
+
+func (p *EtcdPublisher) setLastSuccess() {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	p.lastSuccessAt = time.Now()
+}
+
+func envIntOr(key string, fallback int) int {
+	v := strings.TrimSpace(os.Getenv(key))
+	if v == "" {
+		return fallback
+	}
+	var n int
+	if _, err := fmt.Sscanf(v, "%d", &n); err != nil {
+		return fallback
+	}
+	return n
 }

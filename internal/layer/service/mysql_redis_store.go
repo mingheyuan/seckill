@@ -123,27 +123,22 @@ func (s *MySQLRedisStore) GetStock(activityID int64) int64 {
 }
 
 func (s *MySQLRedisStore) TryReserve(activityID int64, userID string) (bool, string) {
-	bKey :=s.boughtKey(activityID,userID)
-
-	ok,err :=s.redis.SetNX(s.ctx,bKey,"1",10*time.Minute).Result()
+	keys := []string{s.stockKey(activityID), s.boughtKey(activityID,userID)}
+	res,err := s.redis.Eval(s.ctx,acquireScript,keys,600).Int64()
 	if err !=nil {
-		log.Printf("redis SetNX failed, fallback memory: %v", err)
+		log.Printf("redis eval failed, fallback memory: %v", err)
 		return s.fallback.TryReserve(activityID, userID)
 	}
-	if !ok {
-		return false,ErrDuplicateOrder
-	}
 
-	left,err :=s.redis.Decr(s.ctx,s.stockKey(activityID)).Result()
-	if err !=nil {
-		_=s.redis.Del(s.ctx,bKey).Err()
-		return false,ErrSystemBusy
-	}
-
-	if left<0 {
-		_=s.redis.Incr(s.ctx,s.stockKey(activityID)).Err()
-		_=s.redis.Del(s.ctx,bKey).Err()
+	switch res {
+	case 0:
 		return false,ErrSoldOut
+	case 1:
+		return false,ErrDuplicateOrder
+	case 2:
+		// continue
+	default:
+		return false,ErrSystemBusy
 	}
 
 	_,_=s.fallback.TryReserve(activityID,userID)
@@ -216,3 +211,23 @@ func (s *MySQLRedisStore) stockKey(activityID int64) string {
 func (s *MySQLRedisStore) boughtKey(activityID int64,userID string) string {
 	return fmt.Sprintf("seckill:bought:%d:%s",activityID,userID)
 }
+
+const acquireScript = `
+if redis.call('EXISTS', KEYS[2]) == 1 then
+	return 1
+end
+
+local stock = redis.call('GET', KEYS[1])
+if (not stock) then
+	return 0
+end
+
+stock = tonumber(stock)
+if stock <= 0 then
+	return 0
+end
+
+redis.call('DECR', KEYS[1])
+redis.call('SET', KEYS[2], '1', 'EX', tonumber(ARGV[1]))
+return 2
+`

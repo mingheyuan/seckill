@@ -28,6 +28,11 @@ func (h *Handler) Register(r *gin.Engine) {
 	r.POST("/admin/activity/init",h.Init)
 	r.GET("/admin/activity",h.GetActivity)
 	r.POST("/admin/activity",h.UpdateActivity)
+	r.GET("/admin/activity/sync/stats",h.SyncStats)
+}
+
+func (h *Handler) SyncStats(c *gin.Context) {
+	c.JSON(http.StatusOK,h.publisher.Stats())
 }
 
 func (h *Handler) GetActivity(c *gin.Context) {

@@ -8,11 +8,21 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"seckill/internal/proxy/controller"
+	"seckill/internal/proxy/middleware"
 	"seckill/internal/proxy/service"
 )
 
 func main() {
 	r:=gin.Default()
+	_ = r.SetTrustedProxies([]string{"127.0.0.1", "::1"})
+
+	reqPerSec := getEnvInt("PROXY_REQ_PER_SEC",50)
+	ipWhite := getEnvCSV("PROXY_IP_WHITELIST")
+	ipBlack := getEnvCSV("PROXY_IP_BLACKLIST")
+
+	r.Use(middleware.RequestID())
+	r.Use(middleware.IPAccessControl(ipWhite,ipBlack))
+	r.Use(middleware.NewRateLimiter(reqPerSec).Handler())
 
 	layerClient :=service.NewLayerClient("http://127.0.0.1:8081")
 	h:=controller.NewHandler(
@@ -59,4 +69,20 @@ func getEnvBool(key string,fallback bool) bool {
 		return fallback
 	}
 	return b
+}
+
+func getEnvCSV(key string) []string {
+	v := strings.TrimSpace(os.Getenv(key))
+	if v == "" {
+		return nil
+	}
+	parts := strings.Split(v,",")
+	out := make([]string,0,len(parts))
+	for i := range parts {
+		p := strings.TrimSpace(parts[i])
+		if p != "" {
+			out = append(out,p)
+		}
+	}
+	return out
 }
