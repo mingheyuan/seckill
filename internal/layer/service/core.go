@@ -64,9 +64,13 @@ func NewCore(ctx context.Context) *Core {
 		},
 	}
 
-	c.pool =queue.NewWorkerPool(1024,4,func(req model.SeckillRequest){
-		c.store.SaveOrder(req)
+	c.pool =queue.NewWorkerPool(1024,4,func(req model.SeckillRequest) error {
+		err:=c.store.SaveOrder(req)
+		if err !=nil{
+			return err
+		}
 		log.Printf("persist order user=%s activity=%d", req.UserID, req.ActivityID)
+		return nil
 	})
 	c.pool.Start(ctx)
 	return c

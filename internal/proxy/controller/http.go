@@ -7,7 +7,13 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
+
+	"github.com/nacos-group/nacos-sdk-go/v2/clients"
+	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
+	nacosmodel "github.com/nacos-group/nacos-sdk-go/v2/model"
+	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 
 	"github.com/gin-gonic/gin"
 	"seckill/internal/common/model"
@@ -17,22 +23,95 @@ import (
 
 type Handler struct {
 	layer 				*proxysvc.LayerClient
+	layerAddr 			string
 	requireSignature 	bool
 	signSecret 			string
 	maxSkewSec			int64
 }
 
-func NewHandler(layer *proxysvc.LayerClient,requireSignature bool,signSecret string,maxSkewSec int64) *Handler {
+func NewHandler(requireSignature bool,signSecret string,maxSkewSec int64) *Handler {
 	if maxSkewSec<=0 {
 		maxSkewSec =30
 	}
-	return &Handler{
-		layer:layer,
+	h:= &Handler{
 		requireSignature:requireSignature,
 		signSecret:signSecret,
 		maxSkewSec:maxSkewSec,
 	}
+	go h.ServiceConfigLoop()
+
+	return h
 }
+
+func (h *Handler) ServiceConfigLoop(){
+	sc := []constant.ServerConfig{
+		{IpAddr: "127.0.0.1", Port: 8848}, 
+	}
+	cc := constant.ClientConfig{
+		NamespaceId:         "seckill", 
+		NotLoadCacheAtStart:  true,   
+		LogDir:              "/tmp/nacos/log",
+		CacheDir:            "/tmp/nacos/cache",
+	}
+
+	client, err := clients.CreateNamingClient(map[string]interface{}{
+		"serverConfigs": sc,
+		"clientConfig":  cc,
+	})
+	if err != nil {
+		fmt.Println("创建失败：", err)
+		return
+	}
+
+	instances, err :=client.SelectInstances(vo.SelectInstancesParam{
+		ServiceName: "layer-service",
+		HealthyOnly: true, // 只拿健康的
+	})
+	if err != nil {
+		fmt.Println("刷新失败:", err)
+	}
+
+	if addr, ok := firstInstanceAddr(instances); ok {
+		h.layer = proxysvc.NewLayerClient(addr)
+		h.layerAddr = addr
+	}
+
+	//loop循环
+	ticker:=time.NewTicker(10 *time.Second)
+	defer ticker.Stop()
+
+	for{
+		select {
+		case <-ticker.C:
+			instances, err :=client.SelectInstances(vo.SelectInstancesParam{
+				ServiceName: "layer-service",
+				HealthyOnly: true, // 只拿健康的
+			})
+			if err != nil {
+				fmt.Println("刷新失败:", err)
+				continue
+			}
+			if addr, ok := firstInstanceAddr(instances); ok && h.layerAddr != addr {
+				h.layer=proxysvc.NewLayerClient(addr)
+				h.layerAddr=addr
+			}
+		}
+	}
+	
+}
+
+func firstInstanceAddr(instances []nacosmodel.Instance) (string, bool) {
+	if len(instances) == 0 {
+		return "", false
+	}
+	ip := strings.TrimSpace(instances[0].Ip)
+	if ip == "" || instances[0].Port <= 0 {
+		return "", false
+	}
+	return fmt.Sprintf("http://%s:%d", ip, instances[0].Port), true
+}
+
+
 
 func (h *Handler) Register(r *gin.Engine) {
 	r.GET("/healthz",h.Healthz)

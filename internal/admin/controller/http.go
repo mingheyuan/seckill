@@ -1,9 +1,16 @@
 package controller
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"strings"
+	"time"
 
+	"github.com/nacos-group/nacos-sdk-go/v2/clients"
+	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
+	nacosmodel "github.com/nacos-group/nacos-sdk-go/v2/model"
+	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 	"github.com/gin-gonic/gin"
 	"seckill/internal/admin/service"
     "seckill/internal/common/model"
@@ -11,12 +18,86 @@ import (
 
 type Handler struct {
 	client *service.LayerAdminClient
+	clientaddr string
 	publisher *service.EtcdPublisher
 }
 
-func NewHandler(client *service.LayerAdminClient,publisher *service.EtcdPublisher) *Handler {
-	return &Handler{client:client,publisher:publisher}
+func NewHandler(publisher *service.EtcdPublisher) *Handler {
+	h:=&Handler{publisher:publisher}
+	go h.ServiceConfigLoop()
+
+	return h
 }
+
+
+func (h *Handler) ServiceConfigLoop(){
+	sc := []constant.ServerConfig{
+		{IpAddr: "127.0.0.1", Port: 8848}, 
+	}
+	cc := constant.ClientConfig{
+		NamespaceId:         "seckill", 
+		NotLoadCacheAtStart:  true,   
+		LogDir:              "/tmp/nacos/log",
+		CacheDir:            "/tmp/nacos/cache",
+	}
+
+	client, err := clients.CreateNamingClient(map[string]interface{}{
+		"serverConfigs": sc,
+		"clientConfig":  cc,
+	})
+	if err != nil {
+		fmt.Println("创建失败：", err)
+		return
+	}
+
+	instances, err :=client.SelectInstances(vo.SelectInstancesParam{
+		ServiceName: "layer-service",
+		HealthyOnly: true, // 只拿健康的
+	})
+	if err != nil {
+		fmt.Println("刷新失败:", err)
+	}
+
+	if addr, ok := firstInstanceAddr(instances); ok {
+		h.client = service.NewLayerAdminClient(addr)
+		h.clientaddr = addr
+	}
+
+	//loop循环
+	ticker:=time.NewTicker(10 *time.Second)
+	defer ticker.Stop()
+
+	for{
+		select {
+		case <-ticker.C:
+			instances, err :=client.SelectInstances(vo.SelectInstancesParam{
+				ServiceName: "layer-service",
+				HealthyOnly: true, // 只拿健康的
+			})
+			if err != nil {
+				fmt.Println("刷新失败:", err)
+				continue
+			}
+			if addr, ok := firstInstanceAddr(instances); ok && h.clientaddr != addr {
+				h.client = service.NewLayerAdminClient(addr)
+				h.clientaddr = addr
+			}
+		}
+	}
+	
+}
+
+func firstInstanceAddr(instances []nacosmodel.Instance) (string, bool) {
+	if len(instances) == 0 {
+		return "", false
+	}
+	ip := strings.TrimSpace(instances[0].Ip)
+	if ip == "" || instances[0].Port <= 0 {
+		return "", false
+	}
+	return fmt.Sprintf("http://%s:%d", ip, instances[0].Port), true
+}
+
 
 type initReq struct {
 	ActivityID 	int64 	`json:"activity_id" binding:"required"`

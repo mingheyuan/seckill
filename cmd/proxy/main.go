@@ -1,15 +1,18 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nacos-group/nacos-sdk-go/v2/clients"
+	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
+	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 	"seckill/internal/proxy/controller"
 	"seckill/internal/proxy/middleware"
-	"seckill/internal/proxy/service"
 )
 
 func main() {
@@ -24,19 +27,51 @@ func main() {
 	r.Use(middleware.IPAccessControl(ipWhite,ipBlack))
 	r.Use(middleware.NewRateLimiter(reqPerSec).Handler())
 
-	layerClient :=service.NewLayerClient("http://127.0.0.1:8081")
 	h:=controller.NewHandler(
-		layerClient,
 		getEnvBool("PROXY_REQUIRE_SIGNATURE",false),
 		getEnv("PROXY_SIGN_SECRET","seckill_sign"),
 		int64(getEnvInt("PROXY_SIGN_MAX_SKEW_SEC",30)),
 	)
 	h.Register(r)
 
+	
+	//注册微服务
+	sc:=[]constant.ServerConfig{{IpAddr:"127.0.0.1",Port:8848}}
+
+	cc:=constant.ClientConfig{
+		NamespaceId:"seckill",
+	}
+
+	namingClient,err:=clients.CreateNamingClient(map[string]interface{}{
+		"serverConfigs":sc,
+		"clientConfig":cc,
+	})
+	if err!=nil {
+		fmt.Println(err)
+		return
+	}
+
+	success,err:=namingClient.RegisterInstance(vo.RegisterInstanceParam{
+		Ip:"127.0.0.1",
+		Port:8080,
+		ServiceName:"proxy-service",
+		Weight:1.0,
+		Enable:true,
+		Healthy:true,
+	})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	_ = success
+
+	fmt.Println("proxy-service注册成功")
+	
 	log.Println("proxy listening on :8080")
 	if err := r.Run(":8080");err!=nil {
 		log.Fatal(err)
 	}
+
 }
 
 func getEnv(key,fallback string) string {

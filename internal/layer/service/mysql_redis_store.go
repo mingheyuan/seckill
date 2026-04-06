@@ -152,10 +152,9 @@ func (s *MySQLRedisStore) RollbackReserve(activityID int64, userID string) {
     s.fallback.RollbackReserve(activityID, userID)
 }
 
-func (s *MySQLRedisStore) SaveOrder(req model.SeckillRequest) {
-    if s.db==nil {
-		s.fallback.SaveOrder(req)
-		return
+func (s *MySQLRedisStore) SaveOrder(req model.SeckillRequest) error {
+	if s.db == nil {
+		return s.fallback.SaveOrder(req)
 	}
 
 	ctx,cancel :=context.WithTimeout(s.ctx,2*time.Second)
@@ -169,10 +168,13 @@ func (s *MySQLRedisStore) SaveOrder(req model.SeckillRequest) {
 	)
 	if err !=nil {
         log.Printf("mysql save order failed, fallback memory: user=%s activity=%d err=%v", req.UserID, req.ActivityID, err)
-        s.fallback.SaveOrder(req)
-        return
+		if fbErr := s.fallback.SaveOrder(req); fbErr != nil {
+			return fmt.Errorf("mysql save failed: %w, fallback failed: %v", err, fbErr)
+		}
+		return nil
 	}
 
+	return nil
 }
 
 func (s *MySQLRedisStore) ListOrdersByUser(userID string) ([]model.SeckillRequest,error) {

@@ -9,9 +9,9 @@
 [GIN-debug] GET    /admin/activity           --> seckill/internal/admin/controller.(*Handler).GetActivity-fm (3 handlers)
 [GIN-debug] POST   /admin/activity           --> seckill/internal/admin/controller.(*Handler).UpdateActivity-fm (3 handlers)
 [GIN-debug] GET    /admin/activity/sync/stats --> seckill/internal/admin/controller.(*Handler).SyncStats-fm (3 handlers)
-2026/03/29 11:08:35 admin listening on :8082
+proxy-service注册成功
+2026/04/06 04:03:30 admin listening on :8082
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://github.com/gin-gonic/gin/blob/master/docs/doc.md#dont-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8082
-[GIN] 2026/03/29 - 11:08:35 | 200 | 22.733µs |       127.0.0.1 | GET      "/healthz"
-[GIN] 2026/03/29 - 11:08:36 | 200 |   2.53ms |       127.0.0.1 | POST     "/admin/activity/init"
+[GIN] 2026/04/06 - 04:03:30 | 200 | 76.751µs |       127.0.0.1 | GET      "/healthz"

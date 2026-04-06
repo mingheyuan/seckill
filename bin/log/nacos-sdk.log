@@ -1,0 +1,567 @@
+2026-04-05T21:02:55.863-0700	ERROR	cache/disk_cache.go:75	read cacheDir:/home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill failed!err:open /home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill: no such file or directory
+2026-04-05T21:02:55.863-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55184
+2026-04-05T21:02:55.863-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55127
+2026-04-05T21:02:55.863-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=f14abf9e-7061-4feb-8a45-be6fee9d5519)
+2026-04-05T21:02:55.863-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-05T21:02:55.863-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-05T21:02:55.863-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-05T21:02:55.864-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] f14abf9e-7061-4feb-8a45-be6fee9d5519 try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-05T21:02:55.864-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-05T21:02:55.864-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-05T21:02:55.864-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-05T21:02:55.864-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=0b74ca19-04df-495c-91ac-16c71fb58426)
+2026-04-05T21:02:55.864-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-05T21:02:55.864-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-05T21:02:55.864-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-05T21:02:55.864-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] 0b74ca19-04df-495c-91ac-16c71fb58426 try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-05T21:02:55.864-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-05T21:02:55.864-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-05T21:02:55.864-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-05T21:02:55.865-0700	INFO	util/common.go:96	Local IP:192.168.32.131
+2026-04-05T21:02:55.866-0700	INFO	util/common.go:96	Local IP:172.17.0.1
+2026-04-05T21:02:55.893-0700	ERROR	rpc/grpc_client.go:324	1775448175874_127.0.0.1_39182 Unsupported payload type
+2026-04-05T21:02:55.898-0700	ERROR	rpc/grpc_client.go:324	1775448175885_127.0.0.1_39172 Unsupported payload type
+2026-04-05T21:02:55.986-0700	INFO	rpc/rpc_client.go:337	f14abf9e-7061-4feb-8a45-be6fee9d5519 success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775448175874_127.0.0.1_39182
+2026-04-05T21:02:55.986-0700	INFO	naming_http/naming_http_proxy.go:63	register instance namespaceId:<seckill>,serviceName:<proxy-service> with instance:<{"instanceId":"","ip":"127.0.0.1","port":8080,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"","serviceName":"","metadata":{},"instanceHeartBeatInterval":0,"ipDeleteTimeout":0,"instanceHeartBeatTimeOut":0}>
+2026-04-05T21:02:55.987-0700	INFO	rpc/rpc_client.go:487	f14abf9e-7061-4feb-8a45-be6fee9d5519 notify connected event to listeners , connectionId=1775448175874_127.0.0.1_39182
+2026-04-05T21:02:55.990-0700	INFO	rpc/rpc_client.go:337	0b74ca19-04df-495c-91ac-16c71fb58426 success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775448175885_127.0.0.1_39172
+2026-04-05T21:02:55.990-0700	INFO	naming_grpc/naming_grpc_proxy.go:177	Subscribe Service namespaceId:<seckill>, serviceName:<layer-service>, groupName:<DEFAULT_GROUP>, clusters:<>
+2026-04-05T21:02:55.991-0700	INFO	rpc/rpc_client.go:487	0b74ca19-04df-495c-91ac-16c71fb58426 notify connected event to listeners , connectionId=1775448175885_127.0.0.1_39172
+2026-04-05T21:02:55.991-0700	INFO	naming_grpc/naming_grpc_proxy.go:177	Subscribe Service namespaceId:<seckill>, serviceName:<layer-service>, groupName:<DEFAULT_GROUP>, clusters:<>
+2026-04-05T21:02:55.996-0700	WARN	naming_cache/service_info_holder.go:81	instance list is empty, updateCacheWhenEmpty is set to false, callback is not triggered. service name:layer-service
+2026-04-05T21:02:55.998-0700	WARN	naming_cache/service_info_holder.go:81	instance list is empty, updateCacheWhenEmpty is set to false, callback is not triggered. service name:layer-service
+2026-04-05T21:02:56.532-0700	INFO	naming_cache/service_info_holder.go:96	service key:DEFAULT_GROUP@@layer-service was updated to:{"cacheMillis":10000,"hosts":[{"instanceId":"127.0.0.1#8081#DEFAULT#DEFAULT_GROUP@@layer-service","ip":"127.0.0.1","port":8081,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"DEFAULT","serviceName":"DEFAULT_GROUP@@layer-service","metadata":{},"instanceHeartBeatInterval":5000,"ipDeleteTimeout":30000,"instanceHeartBeatTimeOut":15000}],"checksum":"","lastRefTime":1775448176529,"clusters":"","name":"layer-service","groupName":"DEFAULT_GROUP","valid":true,"allIPs":false,"reachProtectionThreshold":false}
+2026-04-05T21:03:05.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:03:15.998-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:03:25.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:03:35.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:03:45.996-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:03:55.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:04:05.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:04:15.996-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:04:25.996-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:04:35.996-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:04:45.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:04:55.998-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:05:05.998-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:05:15.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:05:25.998-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:05:35.996-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:05:45.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:05:55.996-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:06:05.998-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:06:15.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:06:25.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:06:35.998-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:06:45.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:06:55.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:07:05.998-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:07:15.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:07:25.998-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:07:35.998-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:07:45.997-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:07:55.998-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:08:02.455-0700	ERROR	cache/disk_cache.go:75	read cacheDir:/home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill failed!err:open /home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill: no such file or directory
+2026-04-05T21:08:02.456-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55795
+2026-04-05T21:08:02.456-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=0a3d50d9-4eee-4bc3-afe7-eaf8bb9847c7)
+2026-04-05T21:08:02.456-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55644
+2026-04-05T21:08:02.456-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-05T21:08:02.456-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-05T21:08:02.456-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-05T21:08:02.456-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] 0a3d50d9-4eee-4bc3-afe7-eaf8bb9847c7 try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-05T21:08:02.456-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-05T21:08:02.456-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-05T21:08:02.456-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-05T21:08:02.456-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=0ca9767e-e2e3-4480-87d9-e3bf521f106b)
+2026-04-05T21:08:02.456-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-05T21:08:02.456-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-05T21:08:02.456-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-05T21:08:02.457-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] 0ca9767e-e2e3-4480-87d9-e3bf521f106b try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-05T21:08:02.457-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-05T21:08:02.457-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-05T21:08:02.457-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-05T21:08:02.458-0700	INFO	util/common.go:96	Local IP:172.17.0.1
+2026-04-05T21:08:02.458-0700	INFO	util/common.go:96	Local IP:172.17.0.1
+2026-04-05T21:08:02.464-0700	ERROR	rpc/grpc_client.go:324	1775448482459_127.0.0.1_34660 Unsupported payload type
+2026-04-05T21:08:02.465-0700	ERROR	rpc/grpc_client.go:324	1775448482460_127.0.0.1_34646 Unsupported payload type
+2026-04-05T21:08:02.466-0700	ERROR	cache/disk_cache.go:75	read cacheDir:/home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill failed!err:open /home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill: no such file or directory
+2026-04-05T21:08:02.467-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55319
+2026-04-05T21:08:02.467-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=82aec71f-02bb-4b77-a8ae-e6718531b656)
+2026-04-05T21:08:02.467-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-05T21:08:02.467-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-05T21:08:02.467-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-05T21:08:02.467-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] 82aec71f-02bb-4b77-a8ae-e6718531b656 try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-05T21:08:02.467-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-05T21:08:02.467-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-05T21:08:02.467-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-05T21:08:02.469-0700	INFO	util/common.go:96	Local IP:172.17.0.1
+2026-04-05T21:08:02.475-0700	ERROR	rpc/grpc_client.go:324	1775448482469_127.0.0.1_34668 Unsupported payload type
+2026-04-05T21:08:02.562-0700	INFO	rpc/rpc_client.go:337	0ca9767e-e2e3-4480-87d9-e3bf521f106b success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775448482459_127.0.0.1_34660
+2026-04-05T21:08:02.563-0700	INFO	naming_grpc/naming_grpc_proxy.go:177	Subscribe Service namespaceId:<seckill>, serviceName:<layer-service>, groupName:<DEFAULT_GROUP>, clusters:<>
+2026-04-05T21:08:02.563-0700	INFO	rpc/rpc_client.go:487	0ca9767e-e2e3-4480-87d9-e3bf521f106b notify connected event to listeners , connectionId=1775448482459_127.0.0.1_34660
+2026-04-05T21:08:02.563-0700	INFO	rpc/rpc_client.go:337	0a3d50d9-4eee-4bc3-afe7-eaf8bb9847c7 success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775448482460_127.0.0.1_34646
+2026-04-05T21:08:02.563-0700	INFO	naming_grpc/naming_grpc_proxy.go:177	Subscribe Service namespaceId:<seckill>, serviceName:<layer-service>, groupName:<DEFAULT_GROUP>, clusters:<>
+2026-04-05T21:08:02.563-0700	INFO	naming_http/naming_http_proxy.go:63	register instance namespaceId:<seckill>,serviceName:<proxy-service> with instance:<{"instanceId":"","ip":"127.0.0.1","port":8080,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"","serviceName":"","metadata":{},"instanceHeartBeatInterval":0,"ipDeleteTimeout":0,"instanceHeartBeatTimeOut":0}>
+2026-04-05T21:08:02.563-0700	INFO	rpc/rpc_client.go:487	0a3d50d9-4eee-4bc3-afe7-eaf8bb9847c7 notify connected event to listeners , connectionId=1775448482460_127.0.0.1_34646
+2026-04-05T21:08:02.565-0700	INFO	naming_cache/service_info_holder.go:96	service key:DEFAULT_GROUP@@layer-service was updated to:{"cacheMillis":10000,"hosts":[{"instanceId":"127.0.0.1#8081#DEFAULT#DEFAULT_GROUP@@layer-service","ip":"127.0.0.1","port":8081,"weight":1,"healthy":false,"enabled":true,"ephemeral":false,"clusterName":"DEFAULT","serviceName":"DEFAULT_GROUP@@layer-service","metadata":{},"instanceHeartBeatInterval":5000,"ipDeleteTimeout":30000,"instanceHeartBeatTimeOut":15000}],"checksum":"","lastRefTime":1775448482564,"clusters":"","name":"layer-service","groupName":"DEFAULT_GROUP","valid":true,"allIPs":false,"reachProtectionThreshold":false}
+2026-04-05T21:08:02.566-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:08:02.574-0700	INFO	rpc/rpc_client.go:337	82aec71f-02bb-4b77-a8ae-e6718531b656 success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775448482469_127.0.0.1_34668
+2026-04-05T21:08:02.574-0700	INFO	naming_http/naming_http_proxy.go:63	register instance namespaceId:<seckill>,serviceName:<layer-service> with instance:<{"instanceId":"","ip":"127.0.0.1","port":8081,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"","serviceName":"","metadata":{},"instanceHeartBeatInterval":0,"ipDeleteTimeout":0,"instanceHeartBeatTimeOut":0}>
+2026-04-05T21:08:02.575-0700	INFO	rpc/rpc_client.go:487	82aec71f-02bb-4b77-a8ae-e6718531b656 notify connected event to listeners , connectionId=1775448482469_127.0.0.1_34668
+2026-04-05T21:08:03.104-0700	INFO	naming_cache/service_info_holder.go:96	service key:DEFAULT_GROUP@@layer-service was updated to:{"cacheMillis":10000,"hosts":[{"instanceId":"127.0.0.1#8081#DEFAULT#DEFAULT_GROUP@@layer-service","ip":"127.0.0.1","port":8081,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"DEFAULT","serviceName":"DEFAULT_GROUP@@layer-service","metadata":{},"instanceHeartBeatInterval":5000,"ipDeleteTimeout":30000,"instanceHeartBeatTimeOut":15000}],"checksum":"","lastRefTime":1775448483103,"clusters":"","name":"layer-service","groupName":"DEFAULT_GROUP","valid":true,"allIPs":false,"reachProtectionThreshold":false}
+2026-04-05T21:08:12.566-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:08:22.566-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:08:32.567-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:08:42.567-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:08:52.566-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:09:02.567-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:09:12.566-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:09:22.567-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:09:32.566-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:09:42.567-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:09:52.566-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:09:55.208-0700	ERROR	cache/disk_cache.go:75	read cacheDir:/home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill failed!err:open /home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill: no such file or directory
+2026-04-05T21:09:55.208-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55910
+2026-04-05T21:09:55.208-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=7336fe6f-37a5-47ad-9404-4e179592a847)
+2026-04-05T21:09:55.209-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-05T21:09:55.210-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-05T21:09:55.210-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-05T21:09:55.210-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] 7336fe6f-37a5-47ad-9404-4e179592a847 try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-05T21:09:55.210-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-05T21:09:55.210-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-05T21:09:55.210-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-05T21:09:55.210-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55692
+2026-04-05T21:09:55.210-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=cfcb2876-993a-4143-990f-29e0c2520257)
+2026-04-05T21:09:55.210-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-05T21:09:55.211-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-05T21:09:55.211-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-05T21:09:55.211-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] cfcb2876-993a-4143-990f-29e0c2520257 try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-05T21:09:55.211-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-05T21:09:55.211-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-05T21:09:55.211-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-05T21:09:55.214-0700	INFO	util/common.go:96	Local IP:172.17.0.1
+2026-04-05T21:09:55.219-0700	ERROR	rpc/grpc_client.go:324	1775448595215_127.0.0.1_35488 Unsupported payload type
+2026-04-05T21:09:55.220-0700	ERROR	rpc/grpc_client.go:324	1775448595215_127.0.0.1_35476 Unsupported payload type
+2026-04-05T21:09:55.222-0700	ERROR	cache/disk_cache.go:75	read cacheDir:/home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill failed!err:open /home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill: no such file or directory
+2026-04-05T21:09:55.223-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55153
+2026-04-05T21:09:55.223-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=18d0ba87-6e23-4008-855c-7558eff3fa34)
+2026-04-05T21:09:55.223-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-05T21:09:55.223-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-05T21:09:55.223-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-05T21:09:55.223-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] 18d0ba87-6e23-4008-855c-7558eff3fa34 try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-05T21:09:55.223-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-05T21:09:55.223-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-05T21:09:55.223-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-05T21:09:55.224-0700	INFO	util/common.go:96	Local IP:172.17.0.1
+2026-04-05T21:09:55.231-0700	ERROR	rpc/grpc_client.go:324	1775448595225_127.0.0.1_35500 Unsupported payload type
+2026-04-05T21:09:55.318-0700	INFO	rpc/rpc_client.go:337	7336fe6f-37a5-47ad-9404-4e179592a847 success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775448595215_127.0.0.1_35476
+2026-04-05T21:09:55.318-0700	INFO	rpc/rpc_client.go:337	cfcb2876-993a-4143-990f-29e0c2520257 success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775448595215_127.0.0.1_35488
+2026-04-05T21:09:55.318-0700	INFO	naming_grpc/naming_grpc_proxy.go:177	Subscribe Service namespaceId:<seckill>, serviceName:<layer-service>, groupName:<DEFAULT_GROUP>, clusters:<>
+2026-04-05T21:09:55.318-0700	INFO	naming_http/naming_http_proxy.go:63	register instance namespaceId:<seckill>,serviceName:<proxy-service> with instance:<{"instanceId":"","ip":"127.0.0.1","port":8080,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"","serviceName":"","metadata":{},"instanceHeartBeatInterval":0,"ipDeleteTimeout":0,"instanceHeartBeatTimeOut":0}>
+2026-04-05T21:09:55.318-0700	INFO	rpc/rpc_client.go:487	7336fe6f-37a5-47ad-9404-4e179592a847 notify connected event to listeners , connectionId=1775448595215_127.0.0.1_35476
+2026-04-05T21:09:55.318-0700	INFO	rpc/rpc_client.go:487	cfcb2876-993a-4143-990f-29e0c2520257 notify connected event to listeners , connectionId=1775448595215_127.0.0.1_35488
+2026-04-05T21:09:55.319-0700	INFO	naming_grpc/naming_grpc_proxy.go:177	Subscribe Service namespaceId:<seckill>, serviceName:<layer-service>, groupName:<DEFAULT_GROUP>, clusters:<>
+2026-04-05T21:09:55.321-0700	INFO	naming_cache/service_info_holder.go:96	service key:DEFAULT_GROUP@@layer-service was updated to:{"cacheMillis":10000,"hosts":[{"instanceId":"127.0.0.1#8081#DEFAULT#DEFAULT_GROUP@@layer-service","ip":"127.0.0.1","port":8081,"weight":1,"healthy":false,"enabled":true,"ephemeral":false,"clusterName":"DEFAULT","serviceName":"DEFAULT_GROUP@@layer-service","metadata":{},"instanceHeartBeatInterval":5000,"ipDeleteTimeout":30000,"instanceHeartBeatTimeOut":15000}],"checksum":"","lastRefTime":1775448595321,"clusters":"","name":"layer-service","groupName":"DEFAULT_GROUP","valid":true,"allIPs":false,"reachProtectionThreshold":false}
+2026-04-05T21:09:55.322-0700	WARN	naming_cache/service_info_holder.go:89	out of date data received, old-t: 1775448595321, new-t: 1775448595320
+2026-04-05T21:09:55.322-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:09:55.330-0700	INFO	rpc/rpc_client.go:337	18d0ba87-6e23-4008-855c-7558eff3fa34 success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775448595225_127.0.0.1_35500
+2026-04-05T21:09:55.330-0700	INFO	naming_http/naming_http_proxy.go:63	register instance namespaceId:<seckill>,serviceName:<layer-service> with instance:<{"instanceId":"","ip":"127.0.0.1","port":8081,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"","serviceName":"","metadata":{},"instanceHeartBeatInterval":0,"ipDeleteTimeout":0,"instanceHeartBeatTimeOut":0}>
+2026-04-05T21:09:55.330-0700	INFO	rpc/rpc_client.go:487	18d0ba87-6e23-4008-855c-7558eff3fa34 notify connected event to listeners , connectionId=1775448595225_127.0.0.1_35500
+2026-04-05T21:09:55.903-0700	INFO	naming_cache/service_info_holder.go:96	service key:DEFAULT_GROUP@@layer-service was updated to:{"cacheMillis":10000,"hosts":[{"instanceId":"127.0.0.1#8081#DEFAULT#DEFAULT_GROUP@@layer-service","ip":"127.0.0.1","port":8081,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"DEFAULT","serviceName":"DEFAULT_GROUP@@layer-service","metadata":{},"instanceHeartBeatInterval":5000,"ipDeleteTimeout":30000,"instanceHeartBeatTimeOut":15000}],"checksum":"","lastRefTime":1775448595902,"clusters":"","name":"layer-service","groupName":"DEFAULT_GROUP","valid":true,"allIPs":false,"reachProtectionThreshold":false}
+2026-04-05T21:10:05.323-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T21:10:23.445-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:37:21.972-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:37:31.971-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:37:41.971-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:37:51.971-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:38:03.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:38:13.649-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:38:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:38:33.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:38:43.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:38:53.660-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:39:03.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:39:13.649-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:39:23.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:39:33.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:39:43.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:39:53.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:40:03.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:40:13.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:40:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:40:33.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:40:43.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:40:53.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:41:03.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:41:13.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:41:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:41:33.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:41:43.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:41:53.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:42:03.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:42:13.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:42:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:42:33.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:42:43.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:42:53.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:43:03.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:43:13.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:43:23.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:43:33.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:43:43.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:43:53.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:44:03.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:44:13.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:44:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:44:33.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:44:43.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:44:53.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:45:03.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:45:13.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:45:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:45:33.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:45:43.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:45:53.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:46:03.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:46:13.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:46:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:46:33.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:46:43.649-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:46:53.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:47:03.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:47:13.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:47:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:47:33.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:47:43.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:47:53.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:48:03.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:48:13.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:48:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:48:33.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:48:43.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:48:53.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:49:03.649-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:49:13.649-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:49:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:49:33.649-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:49:43.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:49:53.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:50:03.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:50:13.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:50:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:50:33.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:50:43.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:50:53.649-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:51:03.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:51:13.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:51:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:51:33.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:51:43.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:51:53.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:52:03.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:52:13.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:52:23.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:52:33.657-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:52:43.659-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:52:53.727-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:53:03.711-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:53:13.649-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:53:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:53:33.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:53:43.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:53:53.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:54:03.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:54:13.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:54:23.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:54:33.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:54:43.661-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:54:53.872-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:55:03.873-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:55:13.690-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:55:23.740-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:55:33.744-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:55:43.649-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:55:53.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:56:03.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:56:13.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:56:23.663-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:56:33.663-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:56:44.193-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:56:54.286-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:56:54.790-0700	ERROR	rpc/rpc_client.go:526	client sendHealthCheck failed,err=rpc error: code = DeadlineExceeded desc = context deadline exceeded
+2026-04-05T23:56:56.831-0700	INFO	rpc/rpc_client.go:512	18d0ba87-6e23-4008-855c-7558eff3fa34 server healthy check fail, currentConnection=1775448595225_127.0.0.1_35500
+2026-04-05T23:56:57.979-0700	INFO	rpc/rpc_client.go:427	18d0ba87-6e23-4008-855c-7558eff3fa34 try to re connect to a new server, server is not appointed, will choose a random server.
+2026-04-05T23:57:01.590-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-05T23:57:02.210-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-05T23:57:02.492-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-05T23:57:03.987-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:57:05.334-0700	ERROR	rpc/grpc_client.go:324	1775458625182_127.0.0.1_48826 Unsupported payload type
+2026-04-05T23:57:05.410-0700	INFO	rpc/rpc_client.go:440	18d0ba87-6e23-4008-855c-7558eff3fa34 success to connect a server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}, connectionId=1775458625182_127.0.0.1_48826
+2026-04-05T23:57:05.411-0700	INFO	rpc/rpc_client.go:444	18d0ba87-6e23-4008-855c-7558eff3fa34 abandon prev connection, server is {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}, connectionId is 1775448595225_127.0.0.1_35500
+2026-04-05T23:57:05.536-0700	INFO	rpc/rpc_client.go:487	18d0ba87-6e23-4008-855c-7558eff3fa34 notify disconnected event to listeners , connectionId=1775458625182_127.0.0.1_48826
+2026-04-05T23:57:05.560-0700	INFO	rpc/rpc_client.go:487	18d0ba87-6e23-4008-855c-7558eff3fa34 notify connected event to listeners , connectionId=1775458625182_127.0.0.1_48826
+2026-04-05T23:57:05.533-0700	ERROR	rpc/grpc_client.go:280	connectionId 1775448595225_127.0.0.1_35500 received error event, isRunning:false, isAbandon=true, error=rpc error: code = Canceled desc = grpc: the client connection is closing
+2026-04-05T23:57:13.796-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:57:23.826-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:57:33.725-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:57:43.674-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:57:53.680-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:58:03.659-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:58:13.650-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:58:23.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:58:33.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:58:43.647-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:58:53.648-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:59:03.657-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:59:13.670-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:59:23.663-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:59:33.664-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:59:44.338-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:59:56.338-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-05T23:59:58.745-0700	ERROR	rpc/rpc_client.go:526	client sendHealthCheck failed,err=rpc error: code = DeadlineExceeded desc = stream terminated by RST_STREAM with error code: CANCEL
+2026-04-05T23:59:58.748-0700	ERROR	rpc/rpc_client.go:526	client sendHealthCheck failed,err=rpc error: code = DeadlineExceeded desc = context deadline exceeded
+2026-04-06T00:00:06.995-0700	INFO	rpc/rpc_client.go:512	cfcb2876-993a-4143-990f-29e0c2520257 server healthy check fail, currentConnection=1775448595215_127.0.0.1_35488
+2026-04-06T00:00:07.010-0700	INFO	rpc/rpc_client.go:512	7336fe6f-37a5-47ad-9404-4e179592a847 server healthy check fail, currentConnection=1775448595215_127.0.0.1_35476
+2026-04-06T00:00:08.368-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T00:00:15.590-0700	INFO	rpc/rpc_client.go:427	cfcb2876-993a-4143-990f-29e0c2520257 try to re connect to a new server, server is not appointed, will choose a random server.
+2026-04-06T00:00:29.381-0700	INFO	rpc/rpc_client.go:427	7336fe6f-37a5-47ad-9404-4e179592a847 try to re connect to a new server, server is not appointed, will choose a random server.
+2026-04-06T00:00:35.016-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T00:00:33.580-0700	ERROR	rpc/rpc_client.go:526	client sendHealthCheck failed,err=rpc error: code = DeadlineExceeded desc = context deadline exceeded
+2026-04-06T00:00:48.882-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T00:00:55.970-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-06T00:00:49.496-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-06T00:01:26.884-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T00:01:39.664-0700	ERROR	rpc/grpc_client.go:280	connectionId 1775448595215_127.0.0.1_35488 received error event, isRunning:false, isAbandon=false, error=EOF
+2026-04-06T00:01:22.321-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-06T00:01:22.237-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-06T00:01:17.080-0700	ERROR	rpc/grpc_client.go:280	connectionId 1775448595215_127.0.0.1_35476 received error event, isRunning:false, isAbandon=false, error=EOF
+2026-04-06T00:01:50.361-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-06T00:01:50.358-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-06T04:03:28.829-0700	ERROR	cache/disk_cache.go:75	read cacheDir:/home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill failed!err:open /home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill: no such file or directory
+2026-04-06T04:03:28.830-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55868
+2026-04-06T04:03:28.837-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=f43df76c-64c1-4e77-bb0f-a37a587e660a)
+2026-04-06T04:03:28.837-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-06T04:03:28.837-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-06T04:03:28.837-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-06T04:03:28.837-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55828
+2026-04-06T04:03:28.837-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=2af26d0d-6578-4828-b049-ea86b7244b8f)
+2026-04-06T04:03:28.837-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-06T04:03:28.837-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-06T04:03:28.837-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] f43df76c-64c1-4e77-bb0f-a37a587e660a try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-06T04:03:28.837-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-06T04:03:28.838-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] 2af26d0d-6578-4828-b049-ea86b7244b8f try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-06T04:03:28.838-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-06T04:03:28.838-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-06T04:03:28.838-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-06T04:03:28.838-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-06T04:03:28.839-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-06T04:03:28.839-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-06T04:03:28.842-0700	INFO	util/common.go:96	Local IP:172.17.0.1
+2026-04-06T04:03:28.842-0700	INFO	util/common.go:96	Local IP:172.17.0.1
+2026-04-06T04:03:29.017-0700	ERROR	cache/disk_cache.go:75	read cacheDir:/home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill failed!err:open /home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill: no such file or directory
+2026-04-06T04:03:29.020-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55382
+2026-04-06T04:03:29.020-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=ff63f74c-8f91-4962-b5a9-7b0571e9de3f)
+2026-04-06T04:03:29.020-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-06T04:03:29.020-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-06T04:03:29.020-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-06T04:03:29.019-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55059
+2026-04-06T04:03:29.020-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=694d59ec-bed2-4371-bec6-f5c94a0fb6d8)
+2026-04-06T04:03:29.020-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-06T04:03:29.020-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-06T04:03:29.020-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-06T04:03:29.020-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] ff63f74c-8f91-4962-b5a9-7b0571e9de3f try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-06T04:03:29.020-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-06T04:03:29.020-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-06T04:03:29.020-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-06T04:03:29.020-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] 694d59ec-bed2-4371-bec6-f5c94a0fb6d8 try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-06T04:03:29.020-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-06T04:03:29.020-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-06T04:03:29.020-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-06T04:03:29.026-0700	INFO	util/common.go:96	Local IP:172.17.0.1
+2026-04-06T04:03:29.025-0700	INFO	util/common.go:96	Local IP:192.168.32.131
+2026-04-06T04:03:29.236-0700	INFO	rpc/rpc_client.go:337	ff63f74c-8f91-4962-b5a9-7b0571e9de3f success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775473409031_127.0.0.1_52198
+2026-04-06T04:03:29.236-0700	INFO	rpc/rpc_client.go:487	ff63f74c-8f91-4962-b5a9-7b0571e9de3f notify connected event to listeners , connectionId=1775473409031_127.0.0.1_52198
+2026-04-06T04:03:29.236-0700	INFO	naming_http/naming_http_proxy.go:63	register instance namespaceId:<seckill>,serviceName:<proxy-service> with instance:<{"instanceId":"","ip":"127.0.0.1","port":8080,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"","serviceName":"","metadata":{},"instanceHeartBeatInterval":0,"ipDeleteTimeout":0,"instanceHeartBeatTimeOut":0}>
+2026-04-06T04:03:29.236-0700	INFO	rpc/rpc_client.go:337	f43df76c-64c1-4e77-bb0f-a37a587e660a success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775473408902_127.0.0.1_52188
+2026-04-06T04:03:29.236-0700	INFO	naming_grpc/naming_grpc_proxy.go:177	Subscribe Service namespaceId:<seckill>, serviceName:<layer-service>, groupName:<DEFAULT_GROUP>, clusters:<>
+2026-04-06T04:03:29.236-0700	INFO	rpc/rpc_client.go:337	2af26d0d-6578-4828-b049-ea86b7244b8f success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775473408902_127.0.0.1_52176
+2026-04-06T04:03:29.237-0700	INFO	rpc/rpc_client.go:487	f43df76c-64c1-4e77-bb0f-a37a587e660a notify connected event to listeners , connectionId=1775473408902_127.0.0.1_52188
+2026-04-06T04:03:29.237-0700	INFO	naming_http/naming_http_proxy.go:63	register instance namespaceId:<seckill>,serviceName:<admin-service> with instance:<{"instanceId":"","ip":"127.0.0.1","port":8082,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"","serviceName":"","metadata":{},"instanceHeartBeatInterval":0,"ipDeleteTimeout":0,"instanceHeartBeatTimeOut":0}>
+2026-04-06T04:03:29.237-0700	INFO	rpc/rpc_client.go:487	2af26d0d-6578-4828-b049-ea86b7244b8f notify connected event to listeners , connectionId=1775473408902_127.0.0.1_52176
+2026-04-06T04:03:29.237-0700	INFO	rpc/rpc_client.go:337	694d59ec-bed2-4371-bec6-f5c94a0fb6d8 success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775473409041_127.0.0.1_52192
+2026-04-06T04:03:29.237-0700	INFO	naming_grpc/naming_grpc_proxy.go:177	Subscribe Service namespaceId:<seckill>, serviceName:<layer-service>, groupName:<DEFAULT_GROUP>, clusters:<>
+2026-04-06T04:03:29.237-0700	INFO	naming_grpc/naming_grpc_proxy.go:177	Subscribe Service namespaceId:<seckill>, serviceName:<layer-service>, groupName:<DEFAULT_GROUP>, clusters:<>
+2026-04-06T04:03:29.237-0700	INFO	rpc/rpc_client.go:487	694d59ec-bed2-4371-bec6-f5c94a0fb6d8 notify connected event to listeners , connectionId=1775473409041_127.0.0.1_52192
+2026-04-06T04:03:29.237-0700	INFO	naming_grpc/naming_grpc_proxy.go:177	Subscribe Service namespaceId:<seckill>, serviceName:<layer-service>, groupName:<DEFAULT_GROUP>, clusters:<>
+2026-04-06T04:03:29.257-0700	ERROR	cache/disk_cache.go:75	read cacheDir:/home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill failed!err:open /home/yuan/test_sum_seckill_concurrence/seckill/bin/cache/naming/seckill: no such file or directory
+2026-04-06T04:03:29.259-0700	INFO	naming_http/push_receiver.go:89	udp server start, port: 55746
+2026-04-06T04:03:29.259-0700	INFO	rpc/rpc_client.go:157	init rpc client for name %!(EXTRA string=99560461-dca5-464d-b822-34b755da4aa4)
+2026-04-06T04:03:29.260-0700	INFO	rpc/rpc_client.go:166	get app conn labels from client config map[] 
+2026-04-06T04:03:29.260-0700	INFO	rpc/rpc_client.go:168	get app conn labels from env map[] 
+2026-04-06T04:03:29.260-0700	INFO	rpc/rpc_client.go:171	final app conn labels : map[] 
+2026-04-06T04:03:29.261-0700	INFO	rpc/rpc_client.go:327	[RpcClient.Start] 99560461-dca5-464d-b822-34b755da4aa4 try to connect to server on start up, server: {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}
+2026-04-06T04:03:29.261-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-06T04:03:29.261-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-06T04:03:29.261-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-06T04:03:29.273-0700	INFO	util/common.go:96	Local IP:172.17.0.1
+2026-04-06T04:03:29.319-0700	INFO	rpc/rpc_client.go:604	Connection is unregistered, switch server, connectionId=1775473409041_127.0.0.1_52192, request=SubscribeServiceRequest
+2026-04-06T04:03:29.319-0700	ERROR	rpc/rpc_client.go:630	Send request fail, request=SubscribeServiceRequest, body={"requestId":"","namespace":"seckill","serviceName":"layer-service","groupName":"DEFAULT_GROUP","module":"naming","subscribe":true,"clusters":""}, retryTimes=0, error=Connection is unregistered.
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).Request
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/common/remote/rpc/rpc_client.go:610
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client/naming_grpc.(*NamingGrpcProxy).requestToServer
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_grpc/naming_grpc_proxy.go:88
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client/naming_grpc.(*NamingGrpcProxy).Subscribe
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_grpc/naming_grpc_proxy.go:183
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client/naming_grpc.(*ConnectionEventListener).redoSubscribe
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_grpc/connection_event_listener.go:67
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client/naming_grpc.(*ConnectionEventListener).OnConnected
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_grpc/connection_event_listener.go:46
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).notifyConnectionEvent
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/common/remote/rpc/rpc_client.go:490
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).Start.func1
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/common/remote/rpc/rpc_client.go:280
+runtime.goexit
+	/home/yuan/go/src/runtime/asm_amd64.s:1693
+2026-04-06T04:03:29.319-0700	INFO	rpc/rpc_client.go:427	694d59ec-bed2-4371-bec6-f5c94a0fb6d8 try to re connect to a new server, server is not appointed, will choose a random server.
+2026-04-06T04:03:29.319-0700	INFO	rpc/grpc_client.go:175	check tls config %!(EXTRA *constant.TLSConfig=&{false false false    })
+2026-04-06T04:03:29.319-0700	INFO	rpc/grpc_client.go:180	try to get tls config from env
+2026-04-06T04:03:29.319-0700	INFO	rpc/grpc_client.go:189	 tls config from env is not enable
+2026-04-06T04:03:29.338-0700	ERROR	rpc/rpc_client.go:630	Send request fail, request=SubscribeServiceRequest, body={"requestId":"","namespace":"seckill","serviceName":"layer-service","groupName":"DEFAULT_GROUP","module":"naming","subscribe":true,"clusters":""}, retryTimes=0, error=Connection is unregistered.
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).Request
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/common/remote/rpc/rpc_client.go:610
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client/naming_grpc.(*NamingGrpcProxy).requestToServer
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_grpc/naming_grpc_proxy.go:88
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client/naming_grpc.(*NamingGrpcProxy).Subscribe
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_grpc/naming_grpc_proxy.go:183
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client.(*NamingProxyDelegate).Subscribe
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_proxy_delegate.go:121
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client.(*NamingClient).SelectInstances
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_client.go:270
+seckill/internal/proxy/controller.(*Handler).ServiceConfigLoop
+	/home/yuan/test_sum_seckill_concurrence/seckill/internal/proxy/controller/http.go:66
+runtime.goexit
+	/home/yuan/go/src/runtime/asm_amd64.s:1693
+2026-04-06T04:03:29.385-0700	ERROR	rpc/grpc_client.go:324	1775473408902_127.0.0.1_52176 Unsupported payload type
+2026-04-06T04:03:29.386-0700	ERROR	rpc/grpc_client.go:324	1775473409286_127.0.0.1_52212 Unsupported payload type
+2026-04-06T04:03:29.386-0700	ERROR	rpc/grpc_client.go:324	1775473408902_127.0.0.1_52188 Unsupported payload type
+2026-04-06T04:03:29.389-0700	ERROR	rpc/grpc_client.go:324	1775473409031_127.0.0.1_52198 Unsupported payload type
+2026-04-06T04:03:29.389-0700	ERROR	rpc/grpc_client.go:324	1775473409336_127.0.0.1_52214 Unsupported payload type
+2026-04-06T04:03:29.390-0700	ERROR	rpc/grpc_client.go:324	1775473409041_127.0.0.1_52192 Unsupported payload type
+2026-04-06T04:03:29.407-0700	INFO	rpc/rpc_client.go:337	99560461-dca5-464d-b822-34b755da4aa4 success to connect to server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848} on start up, connectionId=1775473409286_127.0.0.1_52212
+2026-04-06T04:03:29.407-0700	INFO	naming_http/naming_http_proxy.go:63	register instance namespaceId:<seckill>,serviceName:<layer-service> with instance:<{"instanceId":"","ip":"127.0.0.1","port":8081,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"","serviceName":"","metadata":{},"instanceHeartBeatInterval":0,"ipDeleteTimeout":0,"instanceHeartBeatTimeOut":0}>
+2026-04-06T04:03:29.407-0700	INFO	rpc/rpc_client.go:487	99560461-dca5-464d-b822-34b755da4aa4 notify connected event to listeners , connectionId=1775473409286_127.0.0.1_52212
+2026-04-06T04:03:29.420-0700	ERROR	rpc/rpc_client.go:630	Send request fail, request=SubscribeServiceRequest, body={"requestId":"","namespace":"seckill","serviceName":"layer-service","groupName":"DEFAULT_GROUP","module":"naming","subscribe":true,"clusters":""}, retryTimes=1, error=client not connected, current status:UNHEALTHY
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).Request
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/common/remote/rpc/rpc_client.go:592
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client/naming_grpc.(*NamingGrpcProxy).requestToServer
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_grpc/naming_grpc_proxy.go:88
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client/naming_grpc.(*NamingGrpcProxy).Subscribe
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_grpc/naming_grpc_proxy.go:183
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client/naming_grpc.(*ConnectionEventListener).redoSubscribe
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_grpc/connection_event_listener.go:67
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client/naming_grpc.(*ConnectionEventListener).OnConnected
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_grpc/connection_event_listener.go:46
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).notifyConnectionEvent
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/common/remote/rpc/rpc_client.go:490
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).Start.func1
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/common/remote/rpc/rpc_client.go:280
+runtime.goexit
+	/home/yuan/go/src/runtime/asm_amd64.s:1693
+2026-04-06T04:03:29.439-0700	ERROR	rpc/rpc_client.go:630	Send request fail, request=SubscribeServiceRequest, body={"requestId":"","namespace":"seckill","serviceName":"layer-service","groupName":"DEFAULT_GROUP","module":"naming","subscribe":true,"clusters":""}, retryTimes=1, error=client not connected, current status:UNHEALTHY
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).Request
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/common/remote/rpc/rpc_client.go:592
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client/naming_grpc.(*NamingGrpcProxy).requestToServer
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_grpc/naming_grpc_proxy.go:88
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client/naming_grpc.(*NamingGrpcProxy).Subscribe
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_grpc/naming_grpc_proxy.go:183
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client.(*NamingProxyDelegate).Subscribe
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_proxy_delegate.go:121
+github.com/nacos-group/nacos-sdk-go/v2/clients/naming_client.(*NamingClient).SelectInstances
+	/home/yuan/go_work/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.3.5/clients/naming_client/naming_client.go:270
+seckill/internal/proxy/controller.(*Handler).ServiceConfigLoop
+	/home/yuan/test_sum_seckill_concurrence/seckill/internal/proxy/controller/http.go:66
+runtime.goexit
+	/home/yuan/go/src/runtime/asm_amd64.s:1693
+2026-04-06T04:03:29.460-0700	INFO	rpc/rpc_client.go:440	694d59ec-bed2-4371-bec6-f5c94a0fb6d8 success to connect a server {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}, connectionId=1775473409336_127.0.0.1_52214
+2026-04-06T04:03:29.460-0700	INFO	rpc/rpc_client.go:444	694d59ec-bed2-4371-bec6-f5c94a0fb6d8 abandon prev connection, server is {serverIp:127.0.0.1 serverPort:8848 serverGrpcPort:9848}, connectionId is 1775473409041_127.0.0.1_52192
+2026-04-06T04:03:29.460-0700	ERROR	rpc/grpc_client.go:280	connectionId 1775473409041_127.0.0.1_52192 received error event, isRunning:true, isAbandon=true, error=rpc error: code = Canceled desc = grpc: the client connection is closing
+2026-04-06T04:03:29.525-0700	INFO	naming_cache/service_info_holder.go:96	service key:DEFAULT_GROUP@@layer-service was updated to:{"cacheMillis":10000,"hosts":[{"instanceId":"127.0.0.1#8081#DEFAULT#DEFAULT_GROUP@@layer-service","ip":"127.0.0.1","port":8081,"weight":1,"healthy":false,"enabled":true,"ephemeral":false,"clusterName":"DEFAULT","serviceName":"DEFAULT_GROUP@@layer-service","metadata":{},"instanceHeartBeatInterval":5000,"ipDeleteTimeout":30000,"instanceHeartBeatTimeOut":15000}],"checksum":"","lastRefTime":1775473409471,"clusters":"","name":"layer-service","groupName":"DEFAULT_GROUP","valid":true,"allIPs":false,"reachProtectionThreshold":false}
+2026-04-06T04:03:29.527-0700	WARN	naming_cache/service_info_holder.go:89	out of date data received, old-t: 1775473409471, new-t: 1775473409471
+2026-04-06T04:03:29.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:03:29.530-0700	INFO	naming_cache/service_info_holder.go:96	service key:DEFAULT_GROUP@@layer-service was updated to:{"cacheMillis":10000,"hosts":[{"instanceId":"127.0.0.1#8081#DEFAULT#DEFAULT_GROUP@@layer-service","ip":"127.0.0.1","port":8081,"weight":1,"healthy":false,"enabled":true,"ephemeral":false,"clusterName":"DEFAULT","serviceName":"DEFAULT_GROUP@@layer-service","metadata":{},"instanceHeartBeatInterval":5000,"ipDeleteTimeout":30000,"instanceHeartBeatTimeOut":15000}],"checksum":"","lastRefTime":1775473409527,"clusters":"","name":"layer-service","groupName":"DEFAULT_GROUP","valid":true,"allIPs":false,"reachProtectionThreshold":false}
+2026-04-06T04:03:29.530-0700	INFO	rpc/rpc_client.go:487	694d59ec-bed2-4371-bec6-f5c94a0fb6d8 notify disconnected event to listeners , connectionId=1775473409336_127.0.0.1_52214
+2026-04-06T04:03:29.530-0700	INFO	rpc/rpc_client.go:487	694d59ec-bed2-4371-bec6-f5c94a0fb6d8 notify connected event to listeners , connectionId=1775473409336_127.0.0.1_52214
+2026-04-06T04:03:29.531-0700	INFO	naming_grpc/naming_grpc_proxy.go:177	Subscribe Service namespaceId:<seckill>, serviceName:<layer-service>, groupName:<DEFAULT_GROUP>, clusters:<>
+2026-04-06T04:03:29.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:03:30.082-0700	INFO	naming_cache/service_info_holder.go:96	service key:DEFAULT_GROUP@@layer-service was updated to:{"cacheMillis":10000,"hosts":[{"instanceId":"127.0.0.1#8081#DEFAULT#DEFAULT_GROUP@@layer-service","ip":"127.0.0.1","port":8081,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"DEFAULT","serviceName":"DEFAULT_GROUP@@layer-service","metadata":{},"instanceHeartBeatInterval":5000,"ipDeleteTimeout":30000,"instanceHeartBeatTimeOut":15000}],"checksum":"","lastRefTime":1775473410069,"clusters":"","name":"layer-service","groupName":"DEFAULT_GROUP","valid":true,"allIPs":false,"reachProtectionThreshold":false}
+2026-04-06T04:03:30.083-0700	INFO	naming_cache/service_info_holder.go:96	service key:DEFAULT_GROUP@@layer-service was updated to:{"cacheMillis":10000,"hosts":[{"instanceId":"127.0.0.1#8081#DEFAULT#DEFAULT_GROUP@@layer-service","ip":"127.0.0.1","port":8081,"weight":1,"healthy":true,"enabled":true,"ephemeral":false,"clusterName":"DEFAULT","serviceName":"DEFAULT_GROUP@@layer-service","metadata":{},"instanceHeartBeatInterval":5000,"ipDeleteTimeout":30000,"instanceHeartBeatTimeOut":15000}],"checksum":"","lastRefTime":1775473410081,"clusters":"","name":"layer-service","groupName":"DEFAULT_GROUP","valid":true,"allIPs":false,"reachProtectionThreshold":false}
+2026-04-06T04:03:39.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:03:39.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:03:49.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:03:49.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:03:59.528-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:03:59.547-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:04:09.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:04:09.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:04:19.528-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:04:19.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:04:29.528-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:04:29.547-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:04:39.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:04:39.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:04:49.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:04:49.547-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:04:59.528-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:04:59.547-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:05:09.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:05:09.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:05:19.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:05:19.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:05:29.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:05:29.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:05:39.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:05:39.547-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:05:49.528-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:05:49.547-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:05:59.528-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:05:59.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:06:09.528-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:06:09.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:06:19.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:06:19.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:06:29.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:06:29.547-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:06:39.528-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:06:39.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:06:49.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:06:49.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:06:59.528-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:06:59.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:07:09.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:07:09.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:07:19.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:07:19.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:07:29.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:07:29.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:07:39.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:07:39.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:07:49.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:07:49.547-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:07:59.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:07:59.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:08:09.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:08:09.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:08:19.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:08:19.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:08:29.528-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:08:29.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:08:39.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:08:39.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:08:49.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:08:49.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:08:59.528-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:08:59.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:09:09.528-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:09:09.547-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:09:19.527-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
+2026-04-06T04:09:19.546-0700	INFO	naming_client/naming_client.go:285	select instances with options: [healthy:<true>], with service:<DEFAULT_GROUP@@layer-service>
