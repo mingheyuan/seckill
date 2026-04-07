@@ -8,6 +8,11 @@
 [GIN-debug] POST   /api/seckill              --> seckill/internal/proxy/controller.(*Handler).Seckill-fm (6 handlers)
 [GIN-debug] GET    /api/orders               --> seckill/internal/proxy/controller.(*Handler).OrdersByUser-fm (6 handlers)
 proxy-service注册成功
-2026/04/06 04:03:30 proxy listening on :8080
+2026/04/07 00:05:13 proxy listening on :8080
 [GIN-debug] Listening and serving HTTP on :8080
-[GIN] 2026/04/06 - 04:03:30 | 200 | 164.432µs |       127.0.0.1 | GET      "/healthz"
+[GIN] 2026/04/07 - 00:05:13 | 200 |   2.65ms |       127.0.0.1 | GET      "/healthz"
+[GIN] 2026/04/07 - 00:07:29 | 400 | 455.594µs |       127.0.0.1 | POST     "/api/seckill"
+[GIN] 2026/04/07 - 00:08:57 | 200 |   1.42ms |       127.0.0.1 | POST     "/api/seckill"
+[GIN] 2026/04/07 - 00:09:22 | 200 | 971.285µs |       127.0.0.1 | POST     "/api/seckill"
+[GIN] 2026/04/07 - 00:09:52 | 200 | 789.908µs |       127.0.0.1 | POST     "/api/seckill"
+[GIN] 2026/04/07 - 00:11:53 | 403 | 280.403µs |    192.168.32.1 | POST     "/api/seckill"

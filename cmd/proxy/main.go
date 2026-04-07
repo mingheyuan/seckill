@@ -11,20 +11,27 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/v2/clients"
 	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
+	"github.com/redis/go-redis/v9"
 	"seckill/internal/proxy/controller"
 	"seckill/internal/proxy/middleware"
 )
 
 func main() {
+	rdb := redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
+	})
+
 	r:=gin.Default()
 	_ = r.SetTrustedProxies([]string{"127.0.0.1", "::1"})
 
 	reqPerSec := getEnvInt("PROXY_REQ_PER_SEC",50)
 	ipWhite := getEnvCSV("PROXY_IP_WHITELIST")
 	ipBlack := getEnvCSV("PROXY_IP_BLACKLIST")
+	_ = ipWhite
+	_ = ipBlack
 
 	r.Use(middleware.RequestID())
-	r.Use(middleware.IPAccessControl(ipWhite,ipBlack))
+	r.Use(middleware.IPAccessControl(rdb))
 	r.Use(middleware.NewRateLimiter(reqPerSec).Handler())
 
 	h:=controller.NewHandler(

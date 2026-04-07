@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
 )
 
 func RequestID() gin.HandlerFunc {
@@ -20,23 +21,22 @@ func RequestID() gin.HandlerFunc {
 	}
 }
 
-func IPAccessControl(whitelist, blacklist []string) gin.HandlerFunc {
-	white := toSet(whitelist)
-	black := toSet(blacklist)
-
+func IPAccessControl(rdb *redis.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ip := c.ClientIP()
-		if _, blocked := black[ip]; blocked {
+		if blackExist,_:=rdb.SIsMember(c.Request.Context(),"ip:blacklist",ip).Result();blackExist {
 			c.JSON(http.StatusForbidden, gin.H{"message": "ip is blocked"})
 			c.Abort()
 			return
 		}
-		if len(white) > 0 {
-			if _, ok := white[ip]; !ok {
+		if whiteLen,_:=rdb.SCard(c.Request.Context(),"ip:whitelist").Result();whiteLen==0{
+			c.Next()
+			return
+		}
+		if  whiteExist, _ := rdb.SIsMember(c.Request.Context(), "ip:whitelist", ip).Result();!whiteExist{
 				c.JSON(http.StatusForbidden, gin.H{"message": "ip is not in whitelist"})
 				c.Abort()
 				return
-			}
 		}
 		c.Next()
 	}
