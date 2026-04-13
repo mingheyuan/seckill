@@ -3,33 +3,39 @@ package main
 import (
 	"fmt"
 	"log"
-	
 
 	"github.com/nacos-group/nacos-sdk-go/v2/clients"
 	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 	"github.com/gin-gonic/gin"
+	"seckill/internal/common/config"
 	"seckill/internal/admin/controller"
-	"seckill/internal/admin/service"
 )
 
 func main() {
-	r:=gin.Default()
+	cfg, err := config.Load("")
+	if err != nil {
+		log.Fatalf("load config failed: %v", err)
+	}
 
-    publisher, err := service.NewEtcdPublisherFromEnv()
-    if err != nil {
-        // 错误说明: 发布器初始化失败不阻塞 admin 启动，避免管理面不可用
-        log.Printf("init etcd publisher failed: %v", err)
-        publisher = &service.EtcdPublisher{}
-    }
-	controller.NewHandler(publisher).Register(r)
+	r:=gin.Default()
+	controller.NewHandler(
+		cfg.Nacos,
+		cfg.Admin.LayerServiceName,
+		cfg.Admin.DiscoveryInterval,
+		cfg.Storage.RedisAddr,
+		cfg.Admin.StockShards,
+	).Register(r)
 
 	
 	//注册微服务
-	sc:=[]constant.ServerConfig{{IpAddr:"127.0.0.1",Port:8848}}
+	sc:=[]constant.ServerConfig{{IpAddr:cfg.Nacos.ServerIP,Port:cfg.Nacos.ServerPort}}
 
 	cc:=constant.ClientConfig{
-		NamespaceId:"seckill",
+		NamespaceId: cfg.Nacos.NamespaceID,
+		NotLoadCacheAtStart: true,
+		LogDir: cfg.Nacos.LogDir,
+		CacheDir: cfg.Nacos.CacheDir,
 	}
 
 	namingClient,err:=clients.CreateNamingClient(map[string]interface{}{
@@ -42,9 +48,9 @@ func main() {
 	}
 
 	success,err:=namingClient.RegisterInstance(vo.RegisterInstanceParam{
-		Ip:"127.0.0.1",
-		Port:8082,
-		ServiceName:"admin-service",
+		Ip: cfg.Admin.RegisterIP,
+		Port: cfg.Admin.RegisterPort,
+		ServiceName: cfg.Admin.ServiceName,
 		Weight:1.0,
 		Enable:true,
 		Healthy:true,
@@ -58,8 +64,8 @@ func main() {
 	fmt.Println("proxy-service注册成功")
 	
 
-	log.Println("admin listening on :8082")
-	if err:=r.Run(":8082");err!=nil {
+	log.Printf("admin listening on %s", cfg.Admin.ListenAddr)
+	if err:=r.Run(cfg.Admin.ListenAddr);err!=nil {
 		log.Fatal(err)
 	}
 }

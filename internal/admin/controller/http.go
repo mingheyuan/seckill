@@ -2,8 +2,8 @@ package controller
 
 import (
 	"fmt"
-	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -12,33 +12,336 @@ import (
 	nacosmodel "github.com/nacos-group/nacos-sdk-go/v2/model"
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 	"github.com/gin-gonic/gin"
+	"seckill/internal/common/config"
+	"seckill/internal/common/model"
 	"seckill/internal/admin/service"
-    "seckill/internal/common/model"
 )
 
 type Handler struct {
-	client *service.LayerAdminClient
-	clientaddr string
-	publisher *service.EtcdPublisher
+	client          *service.LayerAdminClient
+	clientaddr      string
+	nacosCfg        config.NacosConfig
+	layerService    string
+	refreshInterval time.Duration
+	core            service.Core
+	stockShards     int
 }
 
-func NewHandler(publisher *service.EtcdPublisher) *Handler {
-	h:=&Handler{publisher:publisher}
+func (h *Handler) Register(r *gin.Engine) {
+	r.GET("/healthz",h.Healthz)
+
+	r.POST("/admin/activity", h.CreateActivity)           // 创建活动
+	r.GET("/admin/activity/list", h.ListActivities)	 	  // 查询所有活动
+	r.GET("/admin/activity/:id", h.GetActivity)           // 查询活动
+	r.PUT("/admin/activity/:id", h.UpdateActivity)        // 更新活动
+	r.DELETE("/admin/activity/:id", h.DeleteActivity)     // 删除活动
+
+	// 库存管理
+	r.POST("/admin/activity/:id/stock/init", h.InitStock)     // 初始化库存
+	r.POST("/admin/activity/:id/stock/incr", h.IncrStock)     // 补充库存
+	r.GET("/admin/activity/:id/stock", h.GetStock)            // 查询库存
+
+	// 其他管理
+	r.POST("/admin/activity/:id/stop", h.StopActivity)        // 停止活动
+	r.POST("/admin/activity/:id/start", h.StartActivity) 
+}
+
+func NewHandler(nacosCfg config.NacosConfig, layerService string, intervalSec int, redisAddr string, stockShards int) *Handler {
+	if strings.TrimSpace(layerService) == "" {
+		layerService = "layer-service"
+	}
+	if intervalSec <= 0 {
+		intervalSec = 10
+	}
+	if stockShards <= 0 {
+		stockShards = 30
+	}
+
+	h:=&Handler{
+		nacosCfg: nacosCfg,
+		layerService: layerService,
+		refreshInterval: time.Duration(intervalSec) * time.Second,
+		core: service.NewCore(redisAddr, stockShards),
+		stockShards: stockShards,
+	}
 	go h.ServiceConfigLoop()
 
 	return h
 }
 
+// 活动管理
+type createActivityReq struct {
+	ActivityID int64 `json:"activity_id" binding:"required"`
+	Stock      int64 `json:"stock" binding:"required"`
+	model.ActivityConfig
+}
+
+func (h *Handler) CreateActivity(c *gin.Context) {
+	var req createActivityReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad request"})
+		return
+	}
+	err := h.core.CreateActivity(c.Request.Context(), req.ActivityID, req.Stock, req.ActivityConfig)
+	if err != nil {
+		switch err {
+		case service.ErrInvalidActivity:
+			c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "activity_id and stock must be positive"})
+			return
+		case service.ErrActivityExists:
+			c.JSON(http.StatusConflict, gin.H{"code": 409, "message": "activity already exists"})
+			return
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "redis write failed"})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":        0,
+		"message":     "ok",
+		"activity_id": req.ActivityID,
+		"stock":       req.Stock,
+		"shards":      h.stockShards,
+	})
+
+}      // 创建活动
+
+func (h *Handler) GetActivity(c *gin.Context) {
+	activityID, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		return
+	}
+
+	cfg, err := h.core.GetActivityConfig(c.Request.Context(), activityID)
+	if err != nil {
+		switch err {
+		case service.ErrInvalidActivity:
+			c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		case service.ErrActivityNotFound:
+			c.JSON(http.StatusNotFound, gin.H{"code": 404, "message": "activity not found"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "redis read failed"})
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":        0,
+		"activity_id": activityID,
+		"config":      cfg,
+	})
+}         // 查询活动
+func (h *Handler) ListActivities(c *gin.Context) {
+	items, err := h.core.ListActivities(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "redis read failed"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":       0,
+		"activities": items,
+	})
+}      // 查询所有活动
+func (h *Handler) UpdateActivity(c *gin.Context) {
+	activityID, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		return
+	}
+
+	var req model.ActivityConfig
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad request"})
+		return
+	}
+
+	err = h.core.UpdateActivityConfig(c.Request.Context(), activityID, req)
+	if err != nil {
+		switch err {
+		case service.ErrInvalidActivity:
+			c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		case service.ErrActivityNotFound:
+			c.JSON(http.StatusNotFound, gin.H{"code": 404, "message": "activity not found"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "redis write failed"})
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"code": 0, "message": "ok", "activity_id": activityID})
+}      // 更新活动
+func (h *Handler) DeleteActivity(c *gin.Context) {
+	activityID, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		return
+	}
+
+	err = h.core.DeleteActivity(c.Request.Context(), activityID)
+	if err != nil {
+		switch err {
+		case service.ErrInvalidActivity:
+			c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		case service.ErrActivityNotFound:
+			c.JSON(http.StatusNotFound, gin.H{"code": 404, "message": "activity not found"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "redis write failed"})
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"code": 0, "message": "ok", "activity_id": activityID})
+}      // 删除活动
+
+// 库存管理
+func (h *Handler) InitStock(c *gin.Context) {
+	activityID, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		return
+	}
+
+	var req struct {
+		Stock int64 `json:"stock" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad request"})
+		return
+	}
+
+	err = h.core.InitStock(c.Request.Context(), activityID, req.Stock)
+	if err != nil {
+		switch err {
+		case service.ErrInvalidActivity:
+			c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "activity_id and stock must be positive"})
+		case service.ErrActivityNotFound:
+			c.JSON(http.StatusNotFound, gin.H{"code": 404, "message": "activity not found"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "redis write failed"})
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"code": 0, "message": "ok", "activity_id": activityID, "stock": req.Stock, "shards": h.stockShards})
+}           // 初始化库存
+func (h *Handler) IncrStock(c *gin.Context) {
+	activityID, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		return
+	}
+
+	var req struct {
+		Stock int64 `json:"stock" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad request"})
+		return
+	}
+
+	err = h.core.IncrStock(c.Request.Context(), activityID, req.Stock)
+	if err != nil {
+		switch err {
+		case service.ErrInvalidActivity:
+			c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "activity_id and stock must be positive"})
+		case service.ErrActivityNotFound:
+			c.JSON(http.StatusNotFound, gin.H{"code": 404, "message": "activity not found"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "redis write failed"})
+		}
+		return
+	}
+
+	total, err := h.core.GetStock(c.Request.Context(), activityID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "redis read failed"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"code": 0, "message": "ok", "activity_id": activityID, "stock": total, "shards": h.stockShards})
+}           // 补充库存
+func (h *Handler) GetStock(c *gin.Context) {
+	activityID, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		return
+	}
+
+	total, err := h.core.GetStock(c.Request.Context(), activityID)
+	if err != nil {
+		switch err {
+		case service.ErrInvalidActivity:
+			c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		case service.ErrActivityNotFound:
+			c.JSON(http.StatusNotFound, gin.H{"code": 404, "message": "activity not found"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "redis read failed"})
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"code": 0, "activity_id": activityID, "stock": total, "shards": h.stockShards})
+}            // 查询库存
+
+// 其他管理
+func (h *Handler) StopActivity(c *gin.Context) {
+	activityID, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		return
+	}
+
+	err = h.core.UpdateActivityStatus(c.Request.Context(), activityID, 2)
+	if err != nil {
+		switch err {
+		case service.ErrInvalidActivity:
+			c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		case service.ErrActivityNotFound:
+			c.JSON(http.StatusNotFound, gin.H{"code": 404, "message": "activity not found"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "redis write failed"})
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"code": 0, "message": "ok", "activity_id": activityID, "status": 2})
+}        // 停止活动
+func (h *Handler) StartActivity(c *gin.Context) {
+	activityID, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		return
+	}
+
+	err = h.core.UpdateActivityStatus(c.Request.Context(), activityID, 2)
+	if err != nil {
+		switch err {
+		case service.ErrInvalidActivity:
+			c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "bad activity id"})
+		case service.ErrActivityNotFound:
+			c.JSON(http.StatusNotFound, gin.H{"code": 404, "message": "activity not found"})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"code": 500, "message": "redis write failed"})
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"code": 0, "message": "ok", "activity_id": activityID, "status": 2})
+}       // 开始活动
+
 
 func (h *Handler) ServiceConfigLoop(){
 	sc := []constant.ServerConfig{
-		{IpAddr: "127.0.0.1", Port: 8848}, 
+		{IpAddr: h.nacosCfg.ServerIP, Port: h.nacosCfg.ServerPort},
 	}
 	cc := constant.ClientConfig{
-		NamespaceId:         "seckill", 
-		NotLoadCacheAtStart:  true,   
-		LogDir:              "/tmp/nacos/log",
-		CacheDir:            "/tmp/nacos/cache",
+		NamespaceId: h.nacosCfg.NamespaceID,
+		NotLoadCacheAtStart: true,
+		LogDir: h.nacosCfg.LogDir,
+		CacheDir: h.nacosCfg.CacheDir,
 	}
 
 	client, err := clients.CreateNamingClient(map[string]interface{}{
@@ -51,7 +354,7 @@ func (h *Handler) ServiceConfigLoop(){
 	}
 
 	instances, err :=client.SelectInstances(vo.SelectInstancesParam{
-		ServiceName: "layer-service",
+		ServiceName: h.layerService,
 		HealthyOnly: true, // 只拿健康的
 	})
 	if err != nil {
@@ -64,14 +367,14 @@ func (h *Handler) ServiceConfigLoop(){
 	}
 
 	//loop循环
-	ticker:=time.NewTicker(10 *time.Second)
+	ticker:=time.NewTicker(h.refreshInterval)
 	defer ticker.Stop()
 
 	for{
 		select {
 		case <-ticker.C:
 			instances, err :=client.SelectInstances(vo.SelectInstancesParam{
-				ServiceName: "layer-service",
+				ServiceName: h.layerService,
 				HealthyOnly: true, // 只拿健康的
 			})
 			if err != nil {
@@ -99,63 +402,6 @@ func firstInstanceAddr(instances []nacosmodel.Instance) (string, bool) {
 }
 
 
-type initReq struct {
-	ActivityID 	int64 	`json:"activity_id" binding:"required"`
-	Stock 		int64 	`json:"stock" binding:"required"`
-} 
-
-func (h *Handler) Register(r *gin.Engine) {
-	r.GET("/healthz",h.Healthz)
-	r.POST("/admin/activity/init",h.Init)
-	r.GET("/admin/activity",h.GetActivity)
-	r.POST("/admin/activity",h.UpdateActivity)
-	r.GET("/admin/activity/sync/stats",h.SyncStats)
-}
-
-func (h *Handler) SyncStats(c *gin.Context) {
-	c.JSON(http.StatusOK,h.publisher.Stats())
-}
-
-func (h *Handler) GetActivity(c *gin.Context) {
-	cfg,err :=h.client.GetActivity()
-	if err !=nil {
-		c.JSON(http.StatusBadGateway,gin.H{"code":502,"message":"layer unvailable"})
-		return
-	}
-	c.JSON(http.StatusOK,cfg)
-}
-
-func (h *Handler) UpdateActivity(c *gin.Context) {
-	var req model.ActivityConfig
-	if err :=c.ShouldBindJSON(&req);err !=nil {
-		c.JSON(http.StatusBadRequest,gin.H{"code":400,"message":"bad request"})
-		return
-	}
-	if err :=h.client.UpdateActivity(req);err !=nil {
-		c.JSON(http.StatusBadGateway,gin.H{"code":502,"message":"layer unavailable"})
-		return
-	}
-
-    // 错误说明: etcd 同步失败不应让主流程失败，否则 admin 配置会因为 etcd 短抖动不可用
-    if err := h.publisher.PublishActivity(req); err != nil {
-        log.Printf("publish activity to etcd failed: %v", err)
-    }
-	c.JSON(http.StatusOK,gin.H{"code":0,"message":"ok"})
-}
-
 func (h *Handler) Healthz(c *gin.Context) {
 	c.JSON(http.StatusOK,gin.H{"status":"ok"})
-}
-
-func (h *Handler) Init(c *gin.Context) {
-	var req initReq
-	if err :=c.ShouldBindJSON(&req);err !=nil {
-		c.JSON(http.StatusBadRequest,gin.H{"code":400,"message":"bad request"})
-		return
-	}
-	if err :=h.client.Init(req.ActivityID,req.Stock);err !=nil {
-		c.JSON(http.StatusBadGateway,gin.H{"code":502,"message":"layer unvailable"})
-		return
-	}
-	c.JSON(http.StatusOK,gin.H{"code":0,"message":"ok"})
 }

@@ -10,24 +10,31 @@ import(
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 
 	"github.com/gin-gonic/gin"
+	"seckill/internal/common/config"
 	"seckill/internal/layer/controller"
 	"seckill/internal/layer/service"
 )
 
 func main() {
-	ctx :=context.Background()
-	core :=service.NewCore(ctx)
+	cfg, err := config.Load("")
+	if err != nil {
+		log.Fatalf("load config failed: %v", err)
+	}
 
-	service.StartEtcdActivitySync(ctx,core)
+	ctx :=context.Background()
+	core :=service.NewCore(ctx, cfg)
 
 	r:=gin.Default()
 	controller.NewHandler(core).Register(r)
 	
 
-	sc:=[]constant.ServerConfig{{IpAddr:"127.0.0.1",Port:8848}}
+	sc:=[]constant.ServerConfig{{IpAddr:cfg.Nacos.ServerIP,Port:cfg.Nacos.ServerPort}}
 
 	cc:=constant.ClientConfig{
-		NamespaceId:"seckill",
+		NamespaceId: cfg.Nacos.NamespaceID,
+		NotLoadCacheAtStart: true,
+		LogDir: cfg.Nacos.LogDir,
+		CacheDir: cfg.Nacos.CacheDir,
 	}
 
 	namingClient,err:=clients.CreateNamingClient(map[string]interface{}{
@@ -40,9 +47,9 @@ func main() {
 	}
 
 	success,err:=namingClient.RegisterInstance(vo.RegisterInstanceParam{
-		Ip:"127.0.0.1",
-		Port:8081,
-		ServiceName:"layer-service",
+		Ip: cfg.Layer.RegisterIP,
+		Port: cfg.Layer.RegisterPort,
+		ServiceName: cfg.Layer.ServiceName,
 		Weight:1.0,
 		Enable:true,
 		Healthy:true,
@@ -54,8 +61,8 @@ func main() {
 	_ = success
 
 	fmt.Println("layer-service注册成功")
-	log.Println("layer listening on :8081")
-	if err := r.Run(":8081");err !=nil {
+	log.Printf("layer listening on %s", cfg.Layer.ListenAddr)
+	if err := r.Run(cfg.Layer.ListenAddr);err !=nil {
 		log.Fatal(err)
 	}
 

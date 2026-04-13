@@ -1,0 +1,44 @@
+nacos:
+  serverIp: 127.0.0.1
+  serverPort: 8848
+  namespaceId: seckill
+  logDir: /tmp/nacos/log
+  cacheDir: /tmp/nacos/cache
+
+storage:
+  engine: mysql-redis
+  mysqlDsn: root:123456@tcp(127.0.0.1:3306)/seckill?parseTime=true&loc=Local&charset=utf8mb4
+  redisAddr: 127.0.0.1:6379
+
+proxy:
+  listenAddr: :8080
+  registerIp: 127.0.0.1
+  registerPort: 8080
+  serviceName: proxy-service
+  layerServiceName: layer-service
+  reqPerSec: 10000
+  requireSignature: false
+  signSecret: seckill_sign
+  signMaxSkewSec: 30
+  trustedProxies:
+    - 127.0.0.1
+    - ::1
+  discoveryIntervalSec: 10
+
+layer:
+  listenAddr: :8081
+  registerIp: 127.0.0.1
+  registerPort: 8081
+  serviceName: layer-service
+  userLimitPerSec: 20
+  workerCount: 4
+  discoveryIntervalSec: 10
+
+admin:
+  listenAddr: :8082
+  registerIp: 127.0.0.1
+  registerPort: 8082
+  serviceName: admin-service
+  layerServiceName: layer-service
+  discoveryIntervalSec: 10
+  stockShards: 30

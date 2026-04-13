@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/nacos-group/nacos-sdk-go/v2/clients"
@@ -16,27 +18,49 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 
 	"github.com/gin-gonic/gin"
+	"seckill/internal/common/config"
 	"seckill/internal/common/model"
 	proxysvc "seckill/internal/proxy/service"
 	layersvc "seckill/internal/layer/service"
 )
 
 type Handler struct {
-	layer 				*proxysvc.LayerClient
-	layerAddr 			string
+	layers 				[]*proxysvc.LayerClient
+	layerAddrs 			[]string
+	mu 					sync.RWMutex
+	rr 					uint64
 	requireSignature 	bool
 	signSecret 			string
 	maxSkewSec			int64
+	nacosCfg			config.NacosConfig
+	layerService		string
+	refreshInterval		time.Duration
 }
 
-func NewHandler(requireSignature bool,signSecret string,maxSkewSec int64) *Handler {
+
+func (h *Handler) Register(r *gin.Engine) {
+	r.GET("/healthz",h.Healthz)
+	r.POST("/api/seckill",h.Seckill)
+	r.GET("/api/orders",h.OrdersByUser)
+}
+
+func NewHandler(requireSignature bool,signSecret string,maxSkewSec int64,nacosCfg config.NacosConfig,layerService string,intervalSec int) *Handler {
 	if maxSkewSec<=0 {
 		maxSkewSec =30
+	}
+	if strings.TrimSpace(layerService) == "" {
+		layerService = "layer-service"
+	}
+	if intervalSec <= 0 {
+		intervalSec = 10
 	}
 	h:= &Handler{
 		requireSignature:requireSignature,
 		signSecret:signSecret,
 		maxSkewSec:maxSkewSec,
+		nacosCfg: nacosCfg,
+		layerService: layerService,
+		refreshInterval: time.Duration(intervalSec) * time.Second,
 	}
 	go h.ServiceConfigLoop()
 
@@ -45,13 +69,13 @@ func NewHandler(requireSignature bool,signSecret string,maxSkewSec int64) *Handl
 
 func (h *Handler) ServiceConfigLoop(){
 	sc := []constant.ServerConfig{
-		{IpAddr: "127.0.0.1", Port: 8848}, 
+		{IpAddr: h.nacosCfg.ServerIP, Port: h.nacosCfg.ServerPort},
 	}
 	cc := constant.ClientConfig{
-		NamespaceId:         "seckill", 
-		NotLoadCacheAtStart:  true,   
-		LogDir:              "/tmp/nacos/log",
-		CacheDir:            "/tmp/nacos/cache",
+		NamespaceId: h.nacosCfg.NamespaceID,
+		NotLoadCacheAtStart: true,
+		LogDir: h.nacosCfg.LogDir,
+		CacheDir: h.nacosCfg.CacheDir,
 	}
 
 	client, err := clients.CreateNamingClient(map[string]interface{}{
@@ -64,40 +88,63 @@ func (h *Handler) ServiceConfigLoop(){
 	}
 
 	instances, err :=client.SelectInstances(vo.SelectInstancesParam{
-		ServiceName: "layer-service",
+		ServiceName: h.layerService,
 		HealthyOnly: true, // 只拿健康的
 	})
 	if err != nil {
 		fmt.Println("刷新失败:", err)
 	}
 
-	if addr, ok := firstInstanceAddr(instances); ok {
-		h.layer = proxysvc.NewLayerClient(addr)
-		h.layerAddr = addr
-	}
+	h.setLayerClients(instances)
 
 	//loop循环
-	ticker:=time.NewTicker(10 *time.Second)
+	ticker:=time.NewTicker(h.refreshInterval)
 	defer ticker.Stop()
 
 	for{
 		select {
 		case <-ticker.C:
 			instances, err :=client.SelectInstances(vo.SelectInstancesParam{
-				ServiceName: "layer-service",
+				ServiceName: h.layerService,
 				HealthyOnly: true, // 只拿健康的
 			})
 			if err != nil {
 				fmt.Println("刷新失败:", err)
 				continue
 			}
-			if addr, ok := firstInstanceAddr(instances); ok && h.layerAddr != addr {
-				h.layer=proxysvc.NewLayerClient(addr)
-				h.layerAddr=addr
-			}
+			h.setLayerClients(instances)
 		}
 	}
 	
+}
+
+func (h *Handler) setLayerClients(instances []nacosmodel.Instance) {
+	addrs := make([]string, 0, len(instances))
+	clients := make([]*proxysvc.LayerClient, 0, len(instances))
+	for i := range instances {
+		ip := strings.TrimSpace(instances[i].Ip)
+		if ip == "" || instances[i].Port <= 0 {
+			continue
+		}
+		addr := fmt.Sprintf("http://%s:%d", ip, instances[i].Port)
+		addrs = append(addrs, addr)
+		clients = append(clients, proxysvc.NewLayerClient(addr))
+	}
+
+	h.mu.Lock()
+	h.layerAddrs = addrs
+	h.layers = clients
+	h.mu.Unlock()
+}
+
+func (h *Handler) pickLayer() *proxysvc.LayerClient {
+	h.mu.RLock()
+	defer h.mu.RUnlock()
+	if len(h.layers) == 0 {
+		return nil
+	}
+	idx := atomic.AddUint64(&h.rr, 1)
+	return h.layers[idx%uint64(len(h.layers))]
 }
 
 func firstInstanceAddr(instances []nacosmodel.Instance) (string, bool) {
@@ -113,11 +160,6 @@ func firstInstanceAddr(instances []nacosmodel.Instance) (string, bool) {
 
 
 
-func (h *Handler) Register(r *gin.Engine) {
-	r.GET("/healthz",h.Healthz)
-	r.POST("/api/seckill",h.Seckill)
-	r.GET("/api/orders",h.OrdersByUser)
-}
 
 func (h *Handler) OrdersByUser(c *gin.Context) {
 	userID :=c.Query("user_id")
@@ -126,7 +168,13 @@ func (h *Handler) OrdersByUser(c *gin.Context) {
 		return
 	}
 
-	orders,err :=h.layer.OrdersByUser(userID)
+	layer := h.pickLayer()
+	if layer == nil {
+		c.JSON(http.StatusBadGateway,gin.H{"code":502,"message":"layer unavailable"})
+		return
+	}
+
+	orders,err :=layer.OrdersByUser(userID)
 	if err !=nil {
 		c.JSON(http.StatusBadGateway,gin.H{"code":502,"message":"layer unavailable"})
 		return
@@ -155,7 +203,13 @@ func (h *Handler) Seckill(c *gin.Context) {
 			return
 		}
 	}
-	ret,err := h.layer.Seckill(req)
+	layer := h.pickLayer()
+	if layer == nil {
+		c.JSON(http.StatusBadGateway,model.SeckillResponse{Code:502,Message:"layer unavailable"})
+		return
+	}
+
+	ret,err := layer.Seckill(req)
 	if err != nil {
 		c.JSON(http.StatusBadGateway,model.SeckillResponse{Code:502,Message:"layer unavailable"})
 		return

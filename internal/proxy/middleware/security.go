@@ -21,7 +21,7 @@ func RequestID() gin.HandlerFunc {
 	}
 }
 
-func IPAccessControl(rdb *redis.Client) gin.HandlerFunc {
+func IPAccessControl(rdb redis.UniversalClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ip := c.ClientIP()
 		if blackExist,_:=rdb.SIsMember(c.Request.Context(),"ip:blacklist",ip).Result();blackExist {

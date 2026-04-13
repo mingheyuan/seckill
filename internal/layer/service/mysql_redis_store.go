@@ -2,16 +2,14 @@ package service
 
 import (
 	"errors"
-	"os"
-	"strings"
 	"log"
-	"strconv"
 	"context"
 	"time"
 	"fmt"
 	"database/sql"
 
 	"seckill/internal/common/model"
+	"seckill/internal/common/redisx"
 
 	"github.com/redis/go-redis/v9"
 	_ "github.com/go-sql-driver/mysql"
@@ -23,24 +21,17 @@ type MySQLRedisStore struct {
 	mysqlDSN string
 	redisAddr string
 
-	redis 	*redis.Client
+	redis 	redis.UniversalClient
 	db 		*sql.DB
-	ctx 	context.Context
-    fallback *MemoryStore
 }
 
-func NewMySQLRedisStoreFromEnv() (*MySQLRedisStore,error) {
-	mysqlDSN := strings.TrimSpace(os.Getenv("LAYER_MYSQL_DSN"))
-	redisAddr := strings.TrimSpace(os.Getenv("LAYER_REDIS_ADDR"))
+func NewMySQLRedisStore(mysqlDSN, redisAddr string) (*MySQLRedisStore,error) {
 
 	if mysqlDSN =="" || redisAddr =="" {
 		return nil,ErrMySQLRedisNotReady
 	}
 
-	rdb := redis.NewClient(&redis.Options{
-		Addr:redisAddr,
-		DB:0,
-	})
+	rdb := redisx.NewClient(redisAddr, 0)
 
 	ctx,cancel := context.WithTimeout(context.Background(),2*time.Second)
 	defer cancel()
@@ -73,8 +64,6 @@ func NewMySQLRedisStoreFromEnv() (*MySQLRedisStore,error) {
 		redisAddr:redisAddr,
 		redis:rdb,
 		db:db,
-		ctx:context.Background(),
-		fallback:  NewMemoryStore(),
 	}
 
     log.Printf("mysql-redis store enabled: redis=%s", redisAddr)
@@ -98,37 +87,22 @@ CREATE TABLE IF NOT EXISTS orders (
 	return err
 }
 
-func (s *MySQLRedisStore) InitActivity(activityID, stock int64) {
-	if err :=s.redis.Set(s.ctx,s.stockKey(activityID),stock,0).Err();err !=nil {
-		log.Printf("redis init stock failed, fallback memory: activity=%d err=%v", activityID, err)
-		s.fallback.InitActivity(activityID,stock)
-		return
-	}
-
-
-    s.fallback.InitActivity(activityID, stock)
-}
-
-func (s *MySQLRedisStore) GetStock(activityID int64) int64 {
-	v,err := s.redis.Get(s.ctx,s.stockKey(activityID)).Result()
-	if err !=nil {
-		return s.fallback.GetStock(activityID)
-	}
-
-	n,convErr :=strconv.ParseInt(v,10,64)
-	if convErr !=nil {
-		return	s.fallback.GetStock(activityID)
-	}
-    return n
-}
-
 func (s *MySQLRedisStore) TryReserve(activityID int64, userID string) (bool, string) {
-	keys := []string{s.stockKey(activityID), s.boughtKey(activityID,userID)}
-	res,err := s.redis.Eval(s.ctx,acquireScript,keys,600).Int64()
+	keys := []string{s.activeShardsKey(activityID), s.boughtKey(activityID,userID)}
+	res,err := s.redis.Eval(context.Background(),acquireScript,keys,600,activityID).Int64()
 	if err !=nil {
-		log.Printf("redis eval failed, fallback memory: %v", err)
-		return s.fallback.TryReserve(activityID, userID)
+		log.Printf("redis eval failed: %v", err)
+		return false,ErrSystemBusy
 	}
+
+	s.redis.XAdd(context.Background(),&redis.XAddArgs{
+		Stream:"seckill-stream",
+		Values:map[string]interface{}{
+			"user_id":userID,
+			"activity_id":activityID,
+			"timestamp":time.Now().Unix(),
+		},
+	}).Result()
 
 	switch res {
 	case 0:
@@ -140,24 +114,16 @@ func (s *MySQLRedisStore) TryReserve(activityID int64, userID string) (bool, str
 	default:
 		return false,ErrSystemBusy
 	}
-
-	_,_=s.fallback.TryReserve(activityID,userID)
 	return true,"success"
 }
 
 func (s *MySQLRedisStore) RollbackReserve(activityID int64, userID string) {
-	_ =s.redis.Incr(s.ctx,s.stockKey(activityID)).Err()
-	_=s.redis.Del(s.ctx,s.boughtKey(activityID,userID)).Err()
-
-    s.fallback.RollbackReserve(activityID, userID)
+	_ =activityID
+	_=s.redis.Del(context.Background(),s.boughtKey(activityID,userID)).Err()
 }
 
 func (s *MySQLRedisStore) SaveOrder(req model.SeckillRequest) error {
-	if s.db == nil {
-		return s.fallback.SaveOrder(req)
-	}
-
-	ctx,cancel :=context.WithTimeout(s.ctx,2*time.Second)
+	ctx,cancel :=context.WithTimeout(context.Background(),2*time.Second)
 	defer cancel()
 	
 	_,err:=s.db.ExecContext(
@@ -167,22 +133,15 @@ func (s *MySQLRedisStore) SaveOrder(req model.SeckillRequest) error {
 		req.UserID,
 	)
 	if err !=nil {
-        log.Printf("mysql save order failed, fallback memory: user=%s activity=%d err=%v", req.UserID, req.ActivityID, err)
-		if fbErr := s.fallback.SaveOrder(req); fbErr != nil {
-			return fmt.Errorf("mysql save failed: %w, fallback failed: %v", err, fbErr)
-		}
-		return nil
+		log.Printf("mysql save order failed: user=%s activity=%d err=%v", req.UserID, req.ActivityID, err)
+		return err
 	}
 
 	return nil
 }
 
 func (s *MySQLRedisStore) ListOrdersByUser(userID string) ([]model.SeckillRequest,error) {
-	if s.db == nil {
-		return s.fallback.ListOrdersByUser(userID)
-	}
-
-	ctx,cancel := context.WithTimeout(s.ctx,2*time.Second)
+	ctx,cancel := context.WithTimeout(context.Background(),2*time.Second)
 	defer cancel()
 
 	rows,err :=s.db.QueryContext(
@@ -191,7 +150,7 @@ func (s *MySQLRedisStore) ListOrdersByUser(userID string) ([]model.SeckillReques
 		userID,
 	)
 	if err !=nil {
-		return s.fallback.ListOrdersByUser(userID)
+		return nil,err
 	}
 	defer rows.Close()
 
@@ -206,12 +165,12 @@ func (s *MySQLRedisStore) ListOrdersByUser(userID string) ([]model.SeckillReques
 	return out,nil
 }
 
-func (s *MySQLRedisStore) stockKey(activityID int64) string {
-	return fmt.Sprintf("seckill:stock:%d",activityID)
+func (s *MySQLRedisStore) boughtKey(activityID int64,userID string) string {
+	return fmt.Sprintf("seckill:{%d}:bought:%s",activityID,userID)
 }
 
-func (s *MySQLRedisStore) boughtKey(activityID int64,userID string) string {
-	return fmt.Sprintf("seckill:bought:%d:%s",activityID,userID)
+func (s *MySQLRedisStore) activeShardsKey(activityID int64) string {
+	return fmt.Sprintf("seckill:{%d}:shards:active", activityID)
 }
 
 const acquireScript = `
@@ -219,17 +178,23 @@ if redis.call('EXISTS', KEYS[2]) == 1 then
 	return 1
 end
 
-local stock = redis.call('GET', KEYS[1])
-if (not stock) then
-	return 0
-end
+while true do
+	local shard_id = redis.call('SRANDMEMBER', KEYS[1])
+	if (not shard_id) then
+		return 0
+	end
 
-stock = tonumber(stock)
-if stock <= 0 then
-	return 0
+	local stock_key = 'seckill:{' .. tostring(ARGV[2]) .. '}:stock:' .. tostring(shard_id)
+	local stock = tonumber(redis.call('GET', stock_key) or '0')
+	if stock <= 0 then
+		redis.call('SREM', KEYS[1], shard_id)
+	else
+		local left = redis.call('DECR', stock_key)
+		if tonumber(left) == 0 then
+			redis.call('SREM', KEYS[1], shard_id)
+		end
+		redis.call('SET', KEYS[2], '1', 'EX', tonumber(ARGV[1]))
+		return 2
+	end
 end
-
-redis.call('DECR', KEYS[1])
-redis.call('SET', KEYS[2], '1', 'EX', tonumber(ARGV[1]))
-return 2
 `

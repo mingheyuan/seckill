@@ -2,24 +2,24 @@ package service
 
 import (
 	"fmt"
-	"os"
 	"strings"
+
+	"seckill/internal/common/config"
 )
 
 const (
-	StorageMemory ="memory"
 	StorageMySQLRedis ="mysql-redis"
 )
 
-func NewStoreFromEnv() (Store,error) {
-	engine := strings.TrimSpace(strings.ToLower(os.Getenv("LAYER_STORAGE_ENGINE")))
-	if engine =="" ||engine ==StorageMemory {
-		return NewMemoryStore(),nil
+func NewStore(cfg *config.Config) (Store,error) {
+	engine := strings.TrimSpace(strings.ToLower(cfg.Storage.Engine))
+	if engine =="" {
+		engine = StorageMySQLRedis
 	}
 	
 	switch engine {
 	case StorageMySQLRedis:
-		s,err :=NewMySQLRedisStoreFromEnv()
+		s,err :=NewMySQLRedisStore(cfg.Storage.MySQLDSN, cfg.Storage.RedisAddr)
 		if err !=nil {
 			return nil,fmt.Errorf("init mysql-redis store failed: %w",err)
 		}

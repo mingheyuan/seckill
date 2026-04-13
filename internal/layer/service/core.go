@@ -5,8 +5,8 @@ import (
 	"log"
 	"time"
 	"sync"
-	"os"
 
+	"seckill/internal/common/config"
 	"seckill/internal/common/model"
 	"seckill/internal/layer/queue"
 )
@@ -42,19 +42,16 @@ type Core struct {
 	store 			Store
 }
 
-func NewCore(ctx context.Context) *Core {
+func NewCore(ctx context.Context, cfg *config.Config) *Core {
 	now :=time.Now().Unix()
-	s,err:=NewStoreFromEnv()
+	s,err:=NewStore(cfg)
 	if err !=nil {
-        log.Printf("init store failed, fallback to memory: %v", err)
-		s =NewMemoryStore()
-		log.Printf("store selected: %s (fallback)", StorageMemory)
-	} else {
-		log.Printf("store selected: %s", os.Getenv("LAYER_STORAGE_ENGINE"))
+		log.Fatalf("init store failed: %v", err)
 	}
+	log.Printf("store selected: %s", StorageMySQLRedis)
 	c:= &Core{
 		store:s,
-		userLimit:20,
+		userLimit: cfg.Layer.UserLimitPerSec,
 		userSec:make(map[string]userBucket,1024),
 		activity:model.ActivityConfig{
 			Enabled: 	true,
@@ -64,7 +61,7 @@ func NewCore(ctx context.Context) *Core {
 		},
 	}
 
-	c.pool =queue.NewWorkerPool(1024,4,func(req model.SeckillRequest) error {
+	c.pool,err =queue.NewWorkerPool(cfg.Storage.RedisAddr, cfg.Layer.WorkerCount, func(req model.SeckillRequest) error {
 		err:=c.store.SaveOrder(req)
 		if err !=nil{
 			return err
@@ -72,6 +69,9 @@ func NewCore(ctx context.Context) *Core {
 		log.Printf("persist order user=%s activity=%d", req.UserID, req.ActivityID)
 		return nil
 	})
+	if err != nil {
+		log.Fatalf("init worker pool failed: %v", err)
+	}
 	c.pool.Start(ctx)
 	return c
 }
@@ -80,21 +80,6 @@ func (c *Core) GetActivity() model.ActivityConfig {
 	c.actMu.RLock()
 	defer c.actMu.RUnlock()
 	return c.activity
-}
-
-func (c *Core) UpdateActivity(cfg model.ActivityConfig) {
-	c.actMu.Lock()
-	defer c.actMu.Unlock()
-
-	if cfg.EndAtUnix < cfg.StartAtUnix {
-		// 错误说明: 非法时间窗直接拒绝，避免活动状态进入坏数据
-		return
-	}
-
-	if cfg.UserProductLimit<=0 {
-		cfg.UserProductLimit=1
-	}
-	c.activity=cfg
 }
 
 func (c *Core) isActivityOpen(nowUnix int64) bool {
@@ -115,14 +100,6 @@ func (c *Core) isActivityOpen(nowUnix int64) bool {
 	return true
 }
 
-func (c *Core) InitActivity(activityID,stock int64) {
-	c.store.InitActivity(activityID,stock)
-}
-
-func (c *Core) GetStock(activityID int64) int64 {
-	return c.store.GetStock(activityID)
-}
-
 func (c *Core) TrySeckill(req model.SeckillRequest)(bool,string) {
 	if !c.isActivityOpen(time.Now().Unix()) {
 		return false,ErrActivityClosed
@@ -137,10 +114,10 @@ func (c *Core) TrySeckill(req model.SeckillRequest)(bool,string) {
 		return false,msg
 	}
 
-	if ok := c.pool.Submit(req);!ok {
-		c.store.RollbackReserve(req.ActivityID,req.UserID)
-		return false,ErrSystemBusy
-	}
+	// if ok := c.pool.Submit(req);!ok {
+	// 	c.store.RollbackReserve(req.ActivityID,req.UserID)
+	// 	return false,ErrSystemBusy
+	// }
 	return true,"success"
 }
 
