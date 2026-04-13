@@ -1,0 +1,35 @@
+cat > .gitignore << 'EOF'
+# 编译产物
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# 日志文件
+logs/
+*.log
+
+# Go 相关
+vendor/
+*.mod.backup
+*.sum.backup
+
+# IDE 配置
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 本地配置文件（如果有敏感信息）
+config/local.yaml
+.env
+EOF
