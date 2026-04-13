@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 	"sync"
@@ -176,6 +177,7 @@ func (h *Handler) OrdersByUser(c *gin.Context) {
 
 	orders,err :=layer.OrdersByUser(userID)
 	if err !=nil {
+		log.Printf("proxy ordersByUser failed: user=%s err=%v", userID, err)
 		c.JSON(http.StatusBadGateway,gin.H{"code":502,"message":"layer unavailable"})
 		return
 	}
@@ -211,6 +213,7 @@ func (h *Handler) Seckill(c *gin.Context) {
 
 	ret,err := layer.Seckill(req)
 	if err != nil {
+		log.Printf("proxy seckill failed: user=%s activity=%d err=%v", req.UserID, req.ActivityID, err)
 		c.JSON(http.StatusBadGateway,model.SeckillResponse{Code:502,Message:"layer unavailable"})
 		return
 	}

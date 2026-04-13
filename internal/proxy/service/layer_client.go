@@ -20,7 +20,12 @@ func NewLayerClient(baseURL string) *LayerClient {
 	return &LayerClient{
 		baseURL:baseURL,
 		client:&http.Client{
-			Timeout:2*time.Second,
+			Timeout:5*time.Second,
+			Transport:&http.Transport{
+				MaxIdleConns:        200,
+				MaxIdleConnsPerHost: 100,
+				IdleConnTimeout:     90 * time.Second,
+			},
 		},
 	}
 }
@@ -31,11 +36,18 @@ func (lc *LayerClient) Seckill(req model.SeckillRequest) (model.InternalSeckillR
 	b,_:=json.Marshal(req)
 	resp,err :=lc.client.Post(lc.baseURL+"/internal/seckill","application/json",bytes.NewReader(b))
 	if err !=nil {
-		return out,err
+		return out,fmt.Errorf("layer=%s seckill post failed: %w", lc.baseURL, err)
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusConflict && resp.StatusCode != http.StatusTooManyRequests {
+		return out, fmt.Errorf("layer=%s seckill status=%d", lc.baseURL, resp.StatusCode)
+	}
+
 	err =json.NewDecoder(resp.Body).Decode(&out)
+	if err != nil {
+		return out, fmt.Errorf("layer=%s seckill decode failed: %w", lc.baseURL, err)
+	}
 	return out,err
 }
 
@@ -48,13 +60,13 @@ func (lc *LayerClient) OrdersByUser(userID string) ([]model.SeckillRequest,error
 	u :=lc.baseURL +"/internal/orders?user_id=" +url.QueryEscape(userID)
 	resp,err:=lc.client.Get(u)
 	if err !=nil {
-		return nil,err
+		return nil,fmt.Errorf("layer=%s orders get failed: %w", lc.baseURL, err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-        // 错误说明: 不检查状态码会把 404 HTML 当 JSON 解码，最后只看到模糊的 layer unavailable
-        return nil, fmt.Errorf("layer orders status=%d", resp.StatusCode)
+	// 错误说明: 不检查状态码会把 404 HTML 当 JSON 解码，最后只看到模糊的 layer unavailable
+	return nil, fmt.Errorf("layer=%s orders status=%d", lc.baseURL, resp.StatusCode)
     }
 
 	if err :=json.NewDecoder(resp.Body).Decode(&out);err!=nil {
