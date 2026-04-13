@@ -46,11 +46,11 @@ yaml_get() {
 
 cleanup_nacos_layer_instances() {
   local nacos_ip nacos_port namespace_id service_name register_ip base
-  nacos_ip="$(yaml_get nacos serverIp "${BASE_CFG}")"
-  nacos_port="$(yaml_get nacos serverPort "${BASE_CFG}")"
-  namespace_id="$(yaml_get nacos namespaceId "${BASE_CFG}")"
+  nacos_ip="${NACOS_SERVER_IP:-$(yaml_get nacos serverIp "${BASE_CFG}")}"
+  nacos_port="${NACOS_SERVER_PORT:-$(yaml_get nacos serverPort "${BASE_CFG}")}"
+  namespace_id="${NACOS_NAMESPACE_ID:-$(yaml_get nacos namespaceId "${BASE_CFG}")}"
   service_name="$(yaml_get layer serviceName "${BASE_CFG}")"
-  register_ip="$(yaml_get layer registerIp "${BASE_CFG}")"
+  register_ip="${LAYER_REGISTER_IP:-$(yaml_get layer registerIp "${BASE_CFG}")}"
 
   [[ -n "${nacos_ip}" ]] || nacos_ip="127.0.0.1"
   [[ -n "${nacos_port}" ]] || nacos_port="8848"

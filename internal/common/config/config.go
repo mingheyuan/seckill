@@ -122,6 +122,12 @@ func (c *Config) applyEnvOverrides() {
 	applyString(&c.Storage.MySQLDSN, "STORAGE_MYSQL_DSN")
 	applyString(&c.Storage.RedisAddr, "STORAGE_REDIS_ADDR")
 
+	applyString(&c.Nacos.ServerIP, "NACOS_SERVER_IP")
+	applyUint64(&c.Nacos.ServerPort, "NACOS_SERVER_PORT")
+	applyString(&c.Nacos.NamespaceID, "NACOS_NAMESPACE_ID")
+	applyString(&c.Nacos.LogDir, "NACOS_LOG_DIR")
+	applyString(&c.Nacos.CacheDir, "NACOS_CACHE_DIR")
+
 	applyString(&c.Proxy.ListenAddr, "PROXY_LISTEN_ADDR")
 	applyString(&c.Proxy.RegisterIP, "PROXY_REGISTER_IP")
 	applyUint64(&c.Proxy.RegisterPort, "PROXY_REGISTER_PORT")
