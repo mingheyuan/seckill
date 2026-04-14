@@ -7,6 +7,7 @@ import (
 	"time"
 	"fmt"
 	"database/sql"
+	"hash/fnv"
 
 	"seckill/internal/common/model"
 	"seckill/internal/common/redisx"
@@ -16,6 +17,8 @@ import (
 )
 
 var ErrMySQLRedisNotReady = errors.New("mysql-redis store is not ready")
+
+const orderShardCount = 2
 
 type MySQLRedisStore struct {
 	mysqlDSN string
@@ -71,20 +74,28 @@ func NewMySQLRedisStore(mysqlDSN, redisAddr string) (*MySQLRedisStore,error) {
 }
 
 func ensureOrderSchema(ctx context.Context,db *sql.DB) error {
-	ddl:= `
-CREATE TABLE IF NOT EXISTS orders (
+	tctx,cancel := context.WithTimeout(ctx,3*time.Second)
+	defer cancel()
+
+	for i := 0; i < orderShardCount; i++ {
+		table := orderTableByIndex(i)
+		ddl := fmt.Sprintf(`
+CREATE TABLE IF NOT EXISTS %s (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   activity_id BIGINT NOT NULL,
   user_id VARCHAR(64) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY uniq_activity_user (activity_id,user_id)
+  UNIQUE KEY uniq_activity_user (activity_id,user_id),
+  KEY idx_user_id (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
-`
-	tctx,cancel := context.WithTimeout(ctx,3*time.Second)
-	defer cancel()
+`, table)
 
-	_,err :=db.ExecContext(tctx,ddl)
-	return err
+		if _,err := db.ExecContext(tctx,ddl); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (s *MySQLRedisStore) TryReserve(activityID int64, userID string) (bool, string) {
@@ -125,10 +136,12 @@ func (s *MySQLRedisStore) RollbackReserve(activityID int64, userID string) {
 func (s *MySQLRedisStore) SaveOrder(req model.SeckillRequest) error {
 	ctx,cancel :=context.WithTimeout(context.Background(),2*time.Second)
 	defer cancel()
+
+	table := orderTableByUser(req.UserID)
 	
 	_,err:=s.db.ExecContext(
 		ctx,
-		`INSERT INTO orders(activity_id, user_id) VALUES (?,?)`,
+		fmt.Sprintf("INSERT INTO %s(activity_id, user_id) VALUES (?,?)", table),
 		req.ActivityID,
 		req.UserID,
 	)
@@ -144,9 +157,11 @@ func (s *MySQLRedisStore) ListOrdersByUser(userID string) ([]model.SeckillReques
 	ctx,cancel := context.WithTimeout(context.Background(),2*time.Second)
 	defer cancel()
 
+	table := orderTableByUser(userID)
+
 	rows,err :=s.db.QueryContext(
 		ctx,
-		`SELECT activity_id,user_id FROM orders WHERE user_id=? ORDER BY id DESC LIMIT 200`,
+		fmt.Sprintf("SELECT activity_id,user_id FROM %s WHERE user_id=? ORDER BY id DESC LIMIT 200", table),
 		userID,
 	)
 	if err !=nil {
@@ -171,6 +186,25 @@ func (s *MySQLRedisStore) boughtKey(activityID int64,userID string) string {
 
 func (s *MySQLRedisStore) activeShardsKey(activityID int64) string {
 	return fmt.Sprintf("seckill:{%d}:shards:active", activityID)
+}
+
+func orderTableByUser(userID string) string {
+	idx := userServerIndex(userID)
+	return orderTableByIndex(idx)
+}
+
+func orderTableByIndex(idx int) string {
+	return fmt.Sprintf("orders_%d", idx)
+}
+
+func userServerIndex(userID string) int {
+	if orderShardCount <= 1 {
+		return 0
+	}
+
+	h := fnv.New32a()
+	_, _ = h.Write([]byte(userID))
+	return int(h.Sum32() % uint32(orderShardCount))
 }
 
 const acquireScript = `

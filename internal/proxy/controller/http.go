@@ -6,7 +6,9 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"hash/fnv"
 	"log"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -120,16 +122,34 @@ func (h *Handler) ServiceConfigLoop(){
 }
 
 func (h *Handler) setLayerClients(instances []nacosmodel.Instance) {
-	addrs := make([]string, 0, len(instances))
-	clients := make([]*proxysvc.LayerClient, 0, len(instances))
+	type entry struct {
+		addr string
+		cli  *proxysvc.LayerClient
+	}
+
+	entries := make([]entry, 0, len(instances))
 	for i := range instances {
 		ip := strings.TrimSpace(instances[i].Ip)
 		if ip == "" || instances[i].Port <= 0 {
 			continue
 		}
 		addr := fmt.Sprintf("http://%s:%d", ip, instances[i].Port)
-		addrs = append(addrs, addr)
-		clients = append(clients, proxysvc.NewLayerClient(addr))
+		entries = append(entries, entry{
+			addr: addr,
+			cli:  proxysvc.NewLayerClient(addr),
+		})
+	}
+
+	// Keep a stable order so user hash routing is deterministic across refresh loops.
+	sort.Slice(entries, func(i, j int) bool {
+		return entries[i].addr < entries[j].addr
+	})
+
+	addrs := make([]string, 0, len(entries))
+	clients := make([]*proxysvc.LayerClient, 0, len(entries))
+	for i := range entries {
+		addrs = append(addrs, entries[i].addr)
+		clients = append(clients, entries[i].cli)
 	}
 
 	h.mu.Lock()
@@ -146,6 +166,27 @@ func (h *Handler) pickLayer() *proxysvc.LayerClient {
 	}
 	idx := atomic.AddUint64(&h.rr, 1)
 	return h.layers[idx%uint64(len(h.layers))]
+}
+
+func (h *Handler) pickLayerByUserID(userID string) *proxysvc.LayerClient {
+	if strings.TrimSpace(userID) == "" {
+		return h.pickLayer()
+	}
+
+	h.mu.RLock()
+	defer h.mu.RUnlock()
+	if len(h.layers) == 0 {
+		return nil
+	}
+
+	idx := hashUserID(userID) % uint32(len(h.layers))
+	return h.layers[idx]
+}
+
+func hashUserID(userID string) uint32 {
+	h := fnv.New32a()
+	_, _ = h.Write([]byte(userID))
+	return h.Sum32()
 }
 
 func firstInstanceAddr(instances []nacosmodel.Instance) (string, bool) {
@@ -169,7 +210,7 @@ func (h *Handler) OrdersByUser(c *gin.Context) {
 		return
 	}
 
-	layer := h.pickLayer()
+	layer := h.pickLayerByUserID(userID)
 	if layer == nil {
 		c.JSON(http.StatusBadGateway,gin.H{"code":502,"message":"layer unavailable"})
 		return
@@ -205,7 +246,7 @@ func (h *Handler) Seckill(c *gin.Context) {
 			return
 		}
 	}
-	layer := h.pickLayer()
+	layer := h.pickLayerByUserID(req.UserID)
 	if layer == nil {
 		c.JSON(http.StatusBadGateway,model.SeckillResponse{Code:502,Message:"layer unavailable"})
 		return
