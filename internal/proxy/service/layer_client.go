@@ -20,7 +20,7 @@ func NewLayerClient(baseURL string) *LayerClient {
 	return &LayerClient{
 		baseURL:baseURL,
 		client:&http.Client{
-			Timeout:5*time.Second,
+			Timeout:10*time.Second,
 			Transport:&http.Transport{
 				MaxIdleConns:        200,
 				MaxIdleConnsPerHost: 100,

@@ -41,7 +41,7 @@ build_upstream_servers() {
     if [[ -z "${addr}" ]]; then
       continue
     fi
-    out+="        server ${addr} max_fails=3 fail_timeout=2s;"
+    out+="        server ${addr} max_fails=1 fail_timeout=5s;"
     out+=$'\n'
   done
 
@@ -57,21 +57,49 @@ generate_conf() {
   local servers
   servers="$(build_upstream_servers "${PROXY_UPSTREAMS}")"
 
-  sed \
-    -e "s#__LISTEN_PORT__#${NGINX_LISTEN_PORT}#g" \
-    -e "/__UPSTREAM_SERVERS__/ { r /dev/stdin\n d; }" \
-    "${TEMPLATE}" > "${CONF_FILE}" <<< "${servers}"
+  awk -v listen_port="${NGINX_LISTEN_PORT}" -v upstream_servers="${servers}" '
+    {
+      gsub(/__LISTEN_PORT__/, listen_port)
+    }
+    /__UPSTREAM_SERVERS__/ {
+      printf "%s", upstream_servers
+      next
+    }
+    {
+      print
+    }
+  ' "${TEMPLATE}" > "${CONF_FILE}"
 }
 
 nginx_cmd() {
   "${NGINX_BIN}" -p "${RUNTIME_DIR}/" -c "${CONF_FILE}" "$@"
 }
 
+nginx_running() {
+  local pid_file pid
+  pid_file="${RUNTIME_DIR}/logs/nginx.pid"
+  if [[ ! -f "${pid_file}" ]]; then
+    return 1
+  fi
+
+  pid="$(tr -d '[:space:]' < "${pid_file}" 2>/dev/null || true)"
+  if [[ -z "${pid}" ]]; then
+    return 1
+  fi
+  if [[ ! "${pid}" =~ ^[0-9]+$ ]]; then
+    return 1
+  fi
+  if ! kill -0 "${pid}" 2>/dev/null; then
+    return 1
+  fi
+  return 0
+}
+
 case "${ACTION}" in
   up)
     generate_conf
     nginx_cmd -t
-    if [[ -f "${RUNTIME_DIR}/logs/nginx.pid" ]]; then
+    if nginx_running; then
       nginx_cmd -s reload
       echo "nginx lb reloaded on :${NGINX_LISTEN_PORT}" 
     else
@@ -82,11 +110,16 @@ case "${ACTION}" in
   reload)
     generate_conf
     nginx_cmd -t
-    nginx_cmd -s reload
-    echo "nginx lb reloaded on :${NGINX_LISTEN_PORT}" 
+    if nginx_running; then
+      nginx_cmd -s reload
+      echo "nginx lb reloaded on :${NGINX_LISTEN_PORT}" 
+    else
+      nginx_cmd
+      echo "nginx lb started on :${NGINX_LISTEN_PORT}" 
+    fi
     ;;
   down)
-    if [[ -f "${RUNTIME_DIR}/logs/nginx.pid" ]]; then
+    if nginx_running; then
       nginx_cmd -s quit || true
       echo "nginx lb stopped"
     else
@@ -94,13 +127,11 @@ case "${ACTION}" in
     fi
     ;;
   status)
-    if [[ -f "${RUNTIME_DIR}/logs/nginx.pid" ]]; then
+    if nginx_running; then
       pid="$(cat "${RUNTIME_DIR}/logs/nginx.pid" || true)"
-      if [[ -n "${pid}" ]] && kill -0 "${pid}" 2>/dev/null; then
-        echo "nginx lb running pid=${pid} listen=:${NGINX_LISTEN_PORT}"
-        echo "upstreams=${PROXY_UPSTREAMS}"
-        exit 0
-      fi
+      echo "nginx lb running pid=${pid} listen=:${NGINX_LISTEN_PORT}"
+      echo "upstreams=${PROXY_UPSTREAMS}"
+      exit 0
     fi
     echo "nginx lb not running"
     ;;
